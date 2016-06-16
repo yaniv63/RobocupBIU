@@ -1,0 +1,48 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+
+# Debug data
+*.pdb
+
+# Linker files
+*.ilk
+
+# Visual Studio configurations, builds & logs
+*.sdf
+*.opensdf
+*.suo
+Debug/
+ipch/
+
+# Temp files
+*$*
+RemoteSystemsTempFiles/
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# metadata
+.metadata
