@@ -25,7 +25,7 @@ int main()
 	DistanceDBBuilder distanceDBBuilder;
 
 	VideoCapture videoCapture;
-	videoCapture.open(0);
+	videoCapture.open(1);
 	namedWindow("Output", CV_WINDOW_AUTOSIZE);
 	int tilt = MinTilt;
 
@@ -35,8 +35,6 @@ int main()
 			Mat currentFrame;
 			videoCapture >> currentFrame;
 			imshow("Output", currentFrame);
-
-			DrawMiddleColumn();
 
 			cvtColor(currentFrame, currentFrame, CV_BGR2HSV);
 			Mat whiteImage;

@@ -11,7 +11,7 @@ Vision::Vision()
 {
 	Calibration::ReadFromFile();
 
-	m_VideoCapture.open(1);
+	m_VideoCapture.open(0);
 	m_VideoCapture.set(CV_CAP_PROP_FPS, 50);
 	m_VideoCapture.set(CV_CAP_PROP_FRAME_WIDTH, 640);
 	m_VideoCapture.set(CV_CAP_PROP_FRAME_HEIGHT, 480);

@@ -26,18 +26,19 @@
 								<option id="gnu.cpp.compiler.option.include.paths.581202052" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/usr/local/include"/>
 									<listOptionValue builtIn="false" value="/usr/local/include/opencv"/>
-									<listOptionValue builtIn="false" value=""/>
-									<listOptionValue builtIn="false" value="/home/robot/RoboCup2016/RoboCup2016/HROS5-Framework/Linux/include"/>
-									<listOptionValue builtIn="false" value="/home/robot/RoboCup2016/RoboCup2016/HROS5-Framework/Framework/include"/>
-									<listOptionValue builtIn="false" value="/home/robot/RoboCup2016/RoboCup2016/Include"/>
+									<listOptionValue builtIn="false" value="/home/robot/src/HROS5-Framework/Linux/include"/>
+									<listOptionValue builtIn="false" value="/home/robot/src/HROS5-Framework/Framework/include"/>
+									<listOptionValue builtIn="false" value="/home/robot/src/Robocup2016/RoboCup2016/Include"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.other.2015678435" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=c++11" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.dialect.std.1456007280" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1422814922" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool command="gcc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1755059754" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug">
 								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.exe.debug.option.optimization.level.648220818" name="Optimization Level" superClass="gnu.c.compiler.exe.debug.option.optimization.level" valueType="enumerated"/>
 								<option id="gnu.c.compiler.exe.debug.option.debugging.level.1828630436" name="Debug Level" superClass="gnu.c.compiler.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.219535383" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths"/>
+								<option id="gnu.c.compiler.option.dialect.std.983886867" superClass="gnu.c.compiler.option.dialect.std" value="gnu.c.compiler.dialect.default" valueType="enumerated"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1701534173" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1981969675" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug"/>
@@ -78,10 +79,9 @@
 									<listOptionValue builtIn="false" value="/usr/local/lib"/>
 								</option>
 								<option id="gnu.cpp.link.option.userobjs.329520610" name="Other objects" superClass="gnu.cpp.link.option.userobjs" valueType="userObjs">
-									<listOptionValue builtIn="false" value="/home/robot/RoboCup2016/RoboCup2016/HROS5-Framework/Linux/lib/darwin.a"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DistanceCalculator/Debug/DatabaseWrapper.o}&quot;"/>
-									<listOptionValue builtIn="false" value=""/>
-									<listOptionValue builtIn="false" value="/home/robot/RoboCup2016/RoboCup2016/Calibrator/Debug/Calibration.o"/>
+									<listOptionValue builtIn="false" value="/home/robot/src/HROS5-Framework/Linux/lib/darwin.a"/>
+									<listOptionValue builtIn="false" value="/home/robot/src/Robocup2016/RoboCup2016/DistanceCalculator/Debug/DatabaseWrapper.o"/>
+									<listOptionValue builtIn="false" value="/home/robot/src/Robocup2016/RoboCup2016/Calibrator/Debug/Calibration.o"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1116349367" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
