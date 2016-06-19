@@ -20,7 +20,7 @@ protected:
 	virtual DetectedObject* DetectObject(Mat& inputImage) = 0;
 
 private:
-	SharedMemory m_sharedMemory;
+	SharedMemory<DetectedObject> m_sharedMemory;
 };
 
 

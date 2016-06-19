@@ -1,3 +1,4 @@
+/*
 #include "SharedMemory.h"
 
 SharedMemory::SharedMemory(DetectedObject* object)
@@ -51,3 +52,4 @@ DetectedObject* SharedMemory::SafeRead()
 
 	return objectToReturn;
 }
+*/

@@ -6,9 +6,6 @@
  */
 #include "UdpListener.h"
 
-
-#define OUR_TEAM_NUMBER 0
-
 UdpListener* UdpListener::m_instance = NULL;
 
 UdpListener* UdpListener:: GetInstance(){
@@ -23,7 +20,7 @@ UdpListener* UdpListener:: GetInstance(){
 	}
 }
 
-void inline UdpListener:: stopThread()
+void inline UdpListener::stopThread()
 		{
 			m_stop=true;
 			m_listen_thread.join();
@@ -80,7 +77,7 @@ bool UdpListener::is_data_changed(RoboCupGameControlData* old_data, RoboCupGameC
 		if (old_data->kickOffTeam != new_data->kickOffTeam)	return true;
 		if (old_data->secondaryState != new_data->secondaryState)	return true;
 		if (old_data->dropInTeam != new_data->dropInTeam)	return true;
-		if (old_data->teams[0].teamNumber == OUR_TEAM_NUMBER){
+		if (old_data->teams[0].teamNumber == TEAM_NUMBER){
 			for (int i=0; i<MAX_NUM_PLAYERS; i++){
 				if (old_data->teams[0].players[i].penalty != new_data->teams[0].players[i].penalty)	return true;
 				if (old_data->teams[0].players[i].secsTillUnpenalised != new_data->teams[0].players[i].secsTillUnpenalised)	return true;
@@ -102,31 +99,33 @@ void UdpListener::Listen(){
 	cout<<"start listening"<<endl;
 	RoboCupGameControlData oldData,newData;
 	while(!m_stop){
+		cout << "before receive"<<endl;
 		Receive();
 		cout << "received " <<m_byte_buffer<<endl;
 		HeaderType type = GetHeader();
 		switch(type){
 		case RGme:{
-
-					  uint8_t version;
-					  memcpy(&version,m_byte_buffer+4,sizeof(version));
-					  if (version ==m_desired_version){
-						  oldData = newData;
-						  memcpy(&newData,m_byte_buffer,sizeof(RoboCupGameControlData));
-						  printf("header %s, packet number %d ,state %d,secRemaining %d,team number %d \n",newData.header,newData.packetNumber,newData.state,newData.secsRemaining,newData.teams[0].teamNumber);
-						  if (is_data_changed(&oldData, &newData))
-							  cout << "Data changed!! " << endl;
-						 RoboCupGameControlReturnData returnData;
-						 returnData.player = 1;
-						 returnData.team = 2;
-						 returnData.message = 0;
-						 char serilized_data[sizeof (RoboCupGameControlReturnData)];
-					     memcpy(serilized_data,&returnData,sizeof(returnData));
-					 	 UdpSender::GetInstance()->Send(serilized_data);
-
+				  uint8_t version;
+				  memcpy(&version,m_byte_buffer+4,sizeof(version));
+				  if (version ==m_desired_version){
+					  oldData = newData;
+					  memcpy(&newData,m_byte_buffer,sizeof(RoboCupGameControlData));
+					  printf("header %s, packet number %d ,state %d,secRemaining %d,team number %d \n",newData.header,newData.packetNumber,newData.state,newData.secsRemaining,newData.teams[0].teamNumber);
+					  if (is_data_changed(&oldData, &newData)){
+						  cout << "Data changed!! " << endl;
+						  Communication::GetInstance()->WriteGameData(&newData);
+						  Communication::GetInstance()->RaiseDataChanged();
 					  }
-					  break;
-					}
+					  RoboCupGameControlReturnData returnData;
+					  returnData.player = 1;
+					  returnData.team = 2;
+					  returnData.message = 0;
+					  char serilized_data[sizeof (RoboCupGameControlReturnData)];
+					  memcpy(serilized_data,&returnData,sizeof(returnData));
+					  UdpSender::GetInstance()->Send(serilized_data);
+				  }
+				  break;
+				}
 		case unknown: {cout <<"unknown"<<endl;cout.flush();break;}
 		}
 	}

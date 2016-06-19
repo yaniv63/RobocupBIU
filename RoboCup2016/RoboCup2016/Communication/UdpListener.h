@@ -16,6 +16,8 @@
 #include <thread>
 #include "UdpUtils.h"
 
+class Communication;
+
 class UdpListener {
 
 public:

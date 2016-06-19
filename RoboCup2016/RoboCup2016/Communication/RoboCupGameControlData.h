@@ -1,6 +1,7 @@
 #ifndef ROBOCUPGAMECONTROLDATA_H
 #define ROBOCUPGAMECONTROLDATA_H
 
+#include <stdint.h>
 
 
 #define GAMECONTROLLER_PORT            3838
