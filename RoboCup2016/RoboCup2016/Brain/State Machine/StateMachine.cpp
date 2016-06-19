@@ -35,7 +35,7 @@ void StateMachine::Run()
 		m_currentState->Run();
 		stateName = m_currentState->Name();
 		stateVariable = m_currentState->GetStateVariable();
-
+		cout << stateName << endl;
 		switch (stateName)
 		{
 		case State_Init:
@@ -57,7 +57,7 @@ void StateMachine::Run()
 		case State_LookForBall:
 			if (stateVariable == "BallFound")
 			{
-				m_nextState = new GoToBall(100);
+				m_nextState = new GoToBall();
 			}
 			else if (stateVariable == "BallNotFound")
 			{
@@ -82,7 +82,8 @@ void StateMachine::Run()
 			break;
 
 		case State_Kick:
-			m_nextState = new LookForBall();
+			m_nextState = NULL;
+			//m_nextState = new LookForBall();
 			break;
 
 		case State_ChangeSpot:

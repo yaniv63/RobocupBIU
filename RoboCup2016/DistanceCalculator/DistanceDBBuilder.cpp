@@ -47,11 +47,11 @@ map<int,int> DistanceDBBuilder::CreateDatabse(Mat whiteImage, int zeroPixelDista
 	ofstream myfile("a.txt");
 
 	map<int, int> result;
-	int middleColumn = FRAME_WIDTH / 2;
+	int middleColumn = 640 / 2;
 
 	int blockNumber = 0;
 	int pixelsCount = 0;
-	for (int row = FRAME_HEIGHT - 1;
+	for (int row = 480 - 1;
 			row > 0 && static_cast<int>(distances.size()) > blockNumber;
 			row--) {
 		int currentPixel = (int) whiteImage.at<uchar>(row, middleColumn);

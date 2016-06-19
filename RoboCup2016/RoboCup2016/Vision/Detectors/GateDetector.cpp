@@ -34,7 +34,6 @@ DetectedObject* GateDetector::DetectObject(Mat& inputImageHSV)
 	Mat drawingMat;
 	cvtColor(whiteVertical, drawingMat, CV_GRAY2BGR);
 	ImageShowOnDebug("Vertical", "GoalDetector", whiteVertical);
-
 	//creating Mat thr with contours, using canny
 	Mat canny;
 	Canny(whiteVertical, canny, 50, 190, 3, false);
@@ -58,7 +57,6 @@ DetectedObject* GateDetector::DetectObject(Mat& inputImageHSV)
 		}
 
 	ImageShowOnDebug("Field and Contours", "GateDetector", fieldAndContours);
-
 	vector<RotatedRect> post1Candidates;
 	FindPostCandidates(field, minRect, post1Candidates);
 

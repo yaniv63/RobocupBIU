@@ -97,12 +97,16 @@ void* BrainActionAsync(void*)
 
 			case Walk:
 			{
-				motion->StartWalking();
-				while (MotionStatus::FALLEN == STANDUP)
+				motion->StartWalking(5,0,20);
+
+
+
+
+				/*while (MotionStatus::FALLEN == STANDUP)
 				{
-					printf( "Robot is walking!\n");
+					//printf( "Robot is walking!\n");
 					//keep walking
-				}
+				}*/
 			}
 
 			case TurnLeft:

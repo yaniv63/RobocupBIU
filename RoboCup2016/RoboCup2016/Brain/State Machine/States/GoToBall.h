@@ -4,12 +4,13 @@
 class GoToBall : public State
 {
 	public:
-	GoToBall(float);
+	GoToBall();
 	virtual ~GoToBall();
 
 	virtual void Run();
 
 	private:
-	float m_angleToBall;
+	void turnToBall(float angleToBall);
+	const float factor = 1481.0;
 };
 

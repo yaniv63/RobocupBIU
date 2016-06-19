@@ -25,6 +25,16 @@ public:
 	bool IsVisionThreadRunning;
 
 	void ProcessCurrentFrame(Mat& frame);
+
+	void StartBallDetection();
+	void StopBallDetection();
+
+	void StartGoalDetection();
+	void StopGoalDetection();
+
+	void StartLineDetection();
+	void StopLineDetection();
+
 private:
 	VideoCapture m_VideoCapture;
 	Log* m_log;
@@ -34,6 +44,11 @@ private:
 	bool m_SaveVideo;
 	// The video writer that saves the video if m_SaveVideo is true
 	VideoWriter m_OutputVideo;
+
+	// Whether to run ball\Goal\Line detection during the Vision run.
+	bool m_RunBallDetection;
+	bool m_RunGoalDetection;
+	bool m_RunLineDetection;
 
 	static Vision* m_instance;
 	Vision();

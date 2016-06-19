@@ -24,7 +24,7 @@
 #define U2D_DEV_NAME1 "/dev/ttyUSB1"
 
 enum class ActionPage {
-	Init = 1,
+	Init = 9,
 	Kick = 4
 };
 

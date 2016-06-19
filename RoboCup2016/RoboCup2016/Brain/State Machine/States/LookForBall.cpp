@@ -45,7 +45,6 @@ void LookForBall::Run()
 	//Ball detected succesfully
 	WriteLine("Ball found");
 	CenterBall();
-	angleToBall = m_Motion->GetHeadTilt().Pan;
 	m_stateVariable = "BallFound";
 	return;
 }
@@ -59,32 +58,32 @@ void LookForBall::CenterBall()
 
 	//TODO- check when x==-1 and y==-1
 
-	while (location.x < 600 || location.x > 680 || location.y < 320 || location.y > 400)
+	while (location.x < 300 || location.x > 340 || location.y < 220 || location.y > 260)
 	{
-		if (location.x < 600)
-		{
-			//turn head left
-			pan -=5;
-			m_Motion->SetHeadTilt(HeadTilt(tilt, pan));
-
-		}
-		else if (location.x > 680)
+		if (location.x < 300)
 		{
 			//turn head right
-			pan +=5;
+			pan -=2;
+			m_Motion->SetHeadTilt(HeadTilt(tilt, pan));
+
+		}
+		else if (location.x > 340)
+		{
+			//turn head left
+			pan +=2;
 			m_Motion->SetHeadTilt(HeadTilt(tilt, pan));
 		}
 
-		if (location.y < 320)
-		{
-			//turn head down
-			tilt -=5;
-			m_Motion->SetHeadTilt(HeadTilt(tilt, pan));
-		}
-		else if (location.y > 400)
+		if (location.y < 220)
 		{
 			//turn head up
-			tilt +=5;
+			tilt +=2;
+			m_Motion->SetHeadTilt(HeadTilt(tilt, pan));
+		}
+		else if (location.y > 260)
+		{
+			//turn head down
+			tilt -=2;
 			m_Motion->SetHeadTilt(HeadTilt(tilt, pan));
 		}
 		location = m_Vision->Ball->Get()->Location;

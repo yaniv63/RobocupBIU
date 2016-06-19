@@ -9,8 +9,6 @@ class LookForBall : public State
 	virtual void Run();
 	void CenterBall();
 
-	float angleToBall;
-
 	private:
 	LookDirection m_lookDirection;
 };

@@ -13,6 +13,7 @@
 
 void WaitForKey();
 void BackupCurrentDatabase();
+void DrawMiddleColumn(Mat &image);
 
 int main()
 {
@@ -25,7 +26,7 @@ int main()
 	DistanceDBBuilder distanceDBBuilder;
 
 	VideoCapture videoCapture;
-	videoCapture.open(1);
+	videoCapture.open(0);
 	namedWindow("Output", CV_WINDOW_AUTOSIZE);
 	int tilt = MinTilt;
 
@@ -34,7 +35,12 @@ int main()
 		{
 			Mat currentFrame;
 			videoCapture >> currentFrame;
-			imshow("Output", currentFrame);
+
+			Mat output;
+			output = currentFrame.clone();
+			DrawMiddleColumn(output);
+
+			imshow("Output", output);
 
 			cvtColor(currentFrame, currentFrame, CV_BGR2HSV);
 			Mat whiteImage;
@@ -56,13 +62,24 @@ int main()
 			if(exitKey == 's')
 			{
 				// Motion::GetInstance()->SetHeadTilt(HeadTilt(0, tilt));
-				distanceDBBuilder.CreateDatabaseForTilt(currentFrame, -55);
+				distanceDBBuilder.CreateDatabaseForTilt(whiteImage, tilt);
 				tilt += TiltDelta;
 				cout << "Press \"s\" to continue. Current tilt: " << tilt << endl;
 			}
 		}
 
 	return 0;
+}
+
+void DrawMiddleColumn(Mat &image)
+{
+	int middleColumn = 640 / 2;
+	for (int row = 480 - 1; row > 0 ; row--)
+	{
+		image.at<Vec3b>(row, middleColumn)[0] = 255;
+		image.at<Vec3b>(row, middleColumn)[1] = 0;
+		image.at<Vec3b>(row, middleColumn)[2] = 0;
+	}
 }
 
 void WaitForKey()

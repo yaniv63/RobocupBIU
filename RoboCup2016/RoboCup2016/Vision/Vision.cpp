@@ -24,6 +24,9 @@ Vision::Vision()
 	m_log = Log::GetInstance();
 	m_logCategory = typeid(this).name();
 	m_SaveVideo = false;
+	m_RunBallDetection = true;
+	m_RunGoalDetection = true;
+	m_RunLineDetection = true;
 
 	// Video settings
 	if (m_SaveVideo)
@@ -76,12 +79,12 @@ void Vision::Run()
 				Mat currentFrame;
 				m_VideoCapture >> currentFrame;
 
-				timeval timev;
-				gettimeofday(&timev, 0);
-				cout << "Before: " << timev.tv_usec << endl;
+				//timeval timev;
+				//gettimeofday(&timev, 0);
+				//cout << "Before: " << timev.tv_usec << endl;
 				Vision::GetInstance()->ProcessCurrentFrame(currentFrame);
-				gettimeofday(&timev, 0);
-				cout << "After: " << timev.tv_usec << endl;
+				//gettimeofday(&timev, 0);
+				//cout << "After: " << timev.tv_usec << endl;
 
 				imshow("Output", currentFrame);
 				key = waitKey(1);
@@ -106,13 +109,48 @@ void Vision::Run()
 }
 
 void Vision::ProcessCurrentFrame(Mat& currentFrame)
-{
-	Gate->Detect(currentFrame);
-	Ball->Detect(currentFrame);
-	Line->Detect(currentFrame);
+ {
+	if (m_RunGoalDetection) {
+		Gate->Detect(currentFrame);
+	}
+
+	if (m_RunBallDetection) {
+		Ball->Detect(currentFrame);
+	}
+
+	if (m_RunLineDetection) {
+		Line->Detect(currentFrame);
+	}
 }
 
 void Vision::TerminateThread()
 {
 	IsVisionThreadRunning = false;
+}
+
+void Vision::StartBallDetection()
+{
+	m_RunBallDetection = true;
+}
+void Vision::StopBallDetection()
+{
+	m_RunBallDetection = false;
+}
+
+void Vision::StartGoalDetection()
+{
+	m_RunGoalDetection = true;
+}
+void Vision::StopGoalDetection()
+{
+	m_RunGoalDetection = false;
+}
+
+void Vision::StartLineDetection()
+{
+	m_RunLineDetection = true;
+}
+void Vision::StopLineDetection()
+{
+	m_RunLineDetection = false;
 }
