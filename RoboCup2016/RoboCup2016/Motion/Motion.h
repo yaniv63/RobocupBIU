@@ -1,8 +1,8 @@
 #include "MotionIncludes.h"
 
 
-#define MOTION_FILE_PATH    "/home/robot/RoboCup2016/RoboCup2016/HROS5-Framework/Data/motion_4096.bin"
-#define INI_FILE_PATH    	"/home/robot/RoboCup2016/RoboCup2016/HROS5-Framework/Data/config.ini"
+#define MOTION_FILE_PATH    "/home/robot/HROS5-Framework/Data/motion_4096.bin"
+#define INI_FILE_PATH    	"/home/robot/HROS5-Framework/Data/config.ini"
 
 #pragma once
 

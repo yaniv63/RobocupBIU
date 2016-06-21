@@ -11,7 +11,7 @@
 #include "Includes.h"
 #include "Constants.h"
 
-static char* CalibrationFilePath = "/home/robot/RoboCup2016/RoboCup2016/RoboCup2016/calibration.txt";
+static char* CalibrationFilePath = "/home/robot/src/RobocupBIU/RoboCup2016/RoboCup2016/calibration.txt";
 
 class Calibration {
 public:
