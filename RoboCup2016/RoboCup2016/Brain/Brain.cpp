@@ -48,6 +48,23 @@ void* BrainActionAsync(void*)
 	Motion* motion = Motion::GetInstance();
 	motion->StartEngines();
 
+	/*bool flag;
+	RoboCupGameControlData Data;
+	while (1){
+		flag = Communication::GetInstance()->getFlag();
+		if (flag){
+			cout << "Flag was set" << endl;
+			Data = Communication::GetInstance()->ReadDataAndClearFlag();
+			flag = Communication::GetInstance()->getFlag();
+			if (flag) cout << "After ReadDataAndClearFlag, flag is set. Not good!" << endl;
+			else 	  cout << "After ReadDataAndClearFlag, flag is down as needed!" << endl;
+			printf("header %s, packet number %d ,state %d,secRemaining %d,team number %d \n",Data.header,Data.packetNumber,Data.state,Data.secsRemaining,Data.teams[0].teamNumber);
+		}
+	}
+*/
+
+
+
 	while (!terminate)
 	{
 		MenuOption menuOption = ShowMenuAndGetOptionFromUser();

@@ -33,6 +33,7 @@ UdpListener::UdpListener():	 m_port_number("3838"),
 							 m_listen_thread(std::thread(&UdpListener::Listen,this))
 	{
 	m_header[HEADER_LENGTH]='\0';
+	mIsDataChanged.SafeWrite(false);
 
     }
 
@@ -71,23 +72,16 @@ HeaderType UdpListener::ParseHeader(){
 
 bool UdpListener::is_data_changed(RoboCupGameControlData* old_data, RoboCupGameControlData* new_data){
 		//checking whether interesting fields have been changed
-		if (old_data->playersPerTeam != new_data->playersPerTeam)	return true;
 		if (old_data->state != new_data->state)	return true;
 		if (old_data->firstHalf != new_data->firstHalf)	return true;
-		if (old_data->kickOffTeam != new_data->kickOffTeam)	return true;
 		if (old_data->secondaryState != new_data->secondaryState)	return true;
-		if (old_data->dropInTeam != new_data->dropInTeam)	return true;
 		if (old_data->teams[0].teamNumber == TEAM_NUMBER){
-			for (int i=0; i<MAX_NUM_PLAYERS; i++){
-				if (old_data->teams[0].players[i].penalty != new_data->teams[0].players[i].penalty)	return true;
-				if (old_data->teams[0].players[i].secsTillUnpenalised != new_data->teams[0].players[i].secsTillUnpenalised)	return true;
-			}
+			if (old_data->teams[0].players[PLAYER_NUMBER].penalty 			  != new_data->teams[0].players[PLAYER_NUMBER].penalty)	return true;
+			if (old_data->teams[0].players[PLAYER_NUMBER].secsTillUnpenalised != new_data->teams[0].players[PLAYER_NUMBER].secsTillUnpenalised)	return true;
 		}
 		else{
-			for (int i=0; i<MAX_NUM_PLAYERS; i++){
-				if (old_data->teams[1].players[i].penalty != new_data->teams[1].players[i].penalty)	return true;
-				if (old_data->teams[1].players[i].secsTillUnpenalised != new_data->teams[1].players[i].secsTillUnpenalised)	return true;
-			}
+			if (old_data->teams[1].players[PLAYER_NUMBER].penalty 			  != new_data->teams[1].players[PLAYER_NUMBER].penalty)	return true;
+			if (old_data->teams[1].players[PLAYER_NUMBER].secsTillUnpenalised != new_data->teams[1].players[PLAYER_NUMBER].secsTillUnpenalised)	return true;
 		}
 		return false;
 
@@ -99,9 +93,9 @@ void UdpListener::Listen(){
 	cout<<"start listening"<<endl;
 	RoboCupGameControlData oldData,newData;
 	while(!m_stop){
-		cout << "before receive"<<endl;
+		//cout << "before receive"<<endl;
 		Receive();
-		cout << "received " <<m_byte_buffer<<endl;
+		//cout << "received " <<m_byte_buffer<<endl;
 		HeaderType type = GetHeader();
 		switch(type){
 		case RGme:{
@@ -110,7 +104,7 @@ void UdpListener::Listen(){
 				  if (version ==m_desired_version){
 					  oldData = newData;
 					  memcpy(&newData,m_byte_buffer,sizeof(RoboCupGameControlData));
-					  printf("header %s, packet number %d ,state %d,secRemaining %d,team number %d \n",newData.header,newData.packetNumber,newData.state,newData.secsRemaining,newData.teams[0].teamNumber);
+					  printf("penalty team0 %d , team1 %d  \n",newData.teams[0].players[PLAYER_NUMBER].penalty,newData.teams[1].players[PLAYER_NUMBER].penalty);
 					  if (is_data_changed(&oldData, &newData)){
 						  cout << "Data changed!! " << endl;
 						  WriteGameData(newData);

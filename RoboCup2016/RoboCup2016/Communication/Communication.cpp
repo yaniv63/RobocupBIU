@@ -30,14 +30,13 @@ Communication::~Communication()
 	Communication::mInstance = NULL;
 }
 
-RoboCupGameControlData Communication::ReadAndClearFlag(){
+RoboCupGameControlData Communication::ReadDataAndClearFlag(){
 	RoboCupGameControlData returnData = mUdpListener->GetData().SafeRead();
-	bool clearFlag = false;
-	mUdpListener->GetIsChangedFlag().SafeWrite(&clearFlag);
+	mUdpListener->GetIsChangedFlag().SafeWrite(false);
 	return returnData;
 }
 
-bool Communication::isDataChanged(){
+bool Communication::getFlag(){
 	return mUdpListener->GetIsChangedFlag().SafeRead();
 }
 

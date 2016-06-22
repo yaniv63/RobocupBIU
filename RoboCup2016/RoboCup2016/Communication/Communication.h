@@ -9,8 +9,8 @@ class Communication {
 public:
 	static Communication* GetInstance();
 	~Communication();
-	RoboCupGameControlData ReadAndClearFlag();
-	bool isDataChanged();
+	RoboCupGameControlData ReadDataAndClearFlag();
+	bool getFlag();
 
 private:
 	UdpListener* mUdpListener;

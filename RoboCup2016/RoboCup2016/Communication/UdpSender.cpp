@@ -36,7 +36,7 @@ UdpSender::~UdpSender(){
 
 void UdpSender::Send(const char* bytestream) {
 	int numbytes;
-	cout<<"sending message "<<bytestream<<endl;
+	//cout<<"sending message "<<bytestream<<endl;
 	for(int i=0;i<2;++i){
 	if ((numbytes = sendto(m_socket_fd, bytestream, strlen(bytestream), 0,
 			m_robots_address[i]->ai_addr, m_robots_address[i]->ai_addrlen)) == -1) {
@@ -47,7 +47,7 @@ void UdpSender::Send(const char* bytestream) {
 
 void UdpSender::Init(){
 	m_socket_fd = UdpUtils::CreateUdpSendSocket();
-	UdpUtils::CreateAddressInfo("192.168.1.137",m_send_port,m_robots_address[0]);
+	UdpUtils::CreateAddressInfo("192.168.1.120",m_send_port,m_robots_address[0]);
 	UdpUtils::CreateAddressInfo("192.168.1.138",m_send_port,m_robots_address[1]);
 
 }
