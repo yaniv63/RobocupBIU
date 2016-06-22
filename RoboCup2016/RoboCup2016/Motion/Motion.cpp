@@ -130,7 +130,7 @@ void Motion::FreeAllEngines()
 void Motion::SetHeadTilt(HeadTilt headTilt)
 {
 	Head::GetInstance()->MoveByAngle(headTilt.Pan, headTilt.Tilt);
-	//WaitForActionFinish();
+	WaitForActionFinish();
 }
 
 HeadTilt Motion::GetHeadTilt()
