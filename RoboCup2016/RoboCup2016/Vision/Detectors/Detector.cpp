@@ -23,7 +23,6 @@ DetectedObject* Detector::Detect(Mat& inputImage, bool writeToMemory, bool draw)
 
 	// The detection works with HSV image, while the debug drawing works eith BGR image.
 	DetectedObject* detectedObject = DetectObject(currentFrameHSV);
-
 	if (draw)
 	{
 		detectedObject->Draw(inputImage);

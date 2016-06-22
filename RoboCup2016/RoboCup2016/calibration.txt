@@ -8,8 +8,8 @@ White: V_max[255]
 
 Green: H_min[39]
 Green: S_min[107]
-Green: V_min[97]
+Green: V_min[86]
 
-Green: H_max[50]
+Green: H_max[53]
 Green: S_max[245]
 Green: V_max[255]

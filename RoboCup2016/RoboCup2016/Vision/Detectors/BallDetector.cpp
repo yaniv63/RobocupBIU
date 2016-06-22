@@ -24,20 +24,43 @@ DetectedObject* BallDetector::DetectObject(Mat& inputImageHSV)
 		// Cannot find field - Ball not found.
 		return new DetectedBall();
 	}
+	/*waitKey(0);
+	Mat houghCircleInput, houghCircleInputGray;
+	vector<Vec3f> circles;
+	imshow("inputImageHSV", inputImageHSV);
+	waitKey(0);
+	cvtColor(inputImageHSV, houghCircleInput, CV_HSV2BGR);
+	imshow("houghCircleInput", houghCircleInput);
+	waitKey(0);
+	cvtColor(houghCircleInput, houghCircleInputGray, CV_BGR2GRAY);
+	imshow("houghCircleInputGray", houghCircleInputGray);
+	waitKey(0);
+	HoughCircles(houghCircleInputGray, circles, CV_HOUGH_GRADIENT,2, houghCircleInput.rows/4, 200, 100);
+	cout<<"circles size: %d"<<circles.size();
+	Point center(cvRound(circles[0][0]), cvRound(circles[0][1]));
+	int radius = cvRound(circles[0][2]);
+*/
+	//imshow("BallDetector: field", field);
 
 	Mat onlyGreenImage;
 	inRange(inputImageHSV, Calibration::GetInstance()->MinGreenHSV, Calibration::GetInstance()->MaxGreenHSV, onlyGreenImage);
+	//imshow("BallDetector: onlyGreenImage", onlyGreenImage);
+	//waitKey(0);
 	Mat nonGreenImage;
 	bitwise_not(onlyGreenImage, nonGreenImage);
-
+	//imshow("BallDetector: nonGreenImage", nonGreenImage);
+	//waitKey(0);
 	Mat holesInField;
 	bitwise_and(nonGreenImage, field, holesInField);
-
+	//imshow("BallDetector: holesInField", holesInField);
+	//waitKey(0);
 	// Smooth image with blur and closing
 	medianBlur(holesInField, holesInField, 15);
 	CloseImage(holesInField, holesInField);
-
+	//imshow("BallDetector: holesInField after CloseImage", holesInField);
+	//waitKey(0);
 	ImageShowOnDebug("Holes in field", "BallDetector", holesInField);
+
 	vector< vector<Point> > contoursVector = FindContours(holesInField, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
 
 	if (contoursVector.size() == 0)
@@ -92,6 +115,9 @@ DetectedObject* BallDetector::DetectObject(Mat& inputImageHSV)
 	float tilt = Motion::GetInstance()->GetHeadTilt().Tilt;
 	float distance =  0;//m_BallDistanceCalculator->CalculateDistance(centersVector[maxRatioIndex], (int)tilt);
 	return new DetectedBall(centersVector[maxRatioIndex], radiusesVector[maxRatioIndex], distance);
+	//circle(houghCircleInputGray, center, (float)radius, Colors::Blue, 2);
+	//return new DetectedBall(center, (float)radius, 0);
+
 
 
 //	if (maxCentersForRecursiveFilter.size() < DEQUE_SIZE) {
