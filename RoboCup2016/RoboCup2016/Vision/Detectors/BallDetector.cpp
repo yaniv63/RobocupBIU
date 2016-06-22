@@ -18,106 +18,123 @@ BallDetector::~BallDetector()
 
 DetectedObject* BallDetector::DetectObject(Mat& inputImageHSV)
 {
-	Mat field; // B&W image represent the field.
-	if (!FindField(inputImageHSV, field))
-	{
-		// Cannot find field - Ball not found.
-		return new DetectedBall();
-	}
-	/*waitKey(0);
-	Mat houghCircleInput, houghCircleInputGray;
+	//Mat field; // B&W image represent the field.
+	//if (!FindField(inputImageHSV, field))
+	//{
+	//	// Cannot find field - Ball not found.
+	//	return new DetectedBall();
+	//}
+
+	Mat houghCircleInput, houghCircleInputGray, greenMatrixImage;
 	vector<Vec3f> circles;
-	imshow("inputImageHSV", inputImageHSV);
-	waitKey(0);
-	cvtColor(inputImageHSV, houghCircleInput, CV_HSV2BGR);
-	imshow("houghCircleInput", houghCircleInput);
-	waitKey(0);
-	cvtColor(houghCircleInput, houghCircleInputGray, CV_BGR2GRAY);
-	imshow("houghCircleInputGray", houghCircleInputGray);
-	waitKey(0);
-	HoughCircles(houghCircleInputGray, circles, CV_HOUGH_GRADIENT,2, houghCircleInput.rows/4, 200, 100);
+	cvtColor(inputImageHSV, greenMatrixImage, CV_HSV2BGR);
+	vector<Mat> splittedMat;
+	split(greenMatrixImage,splittedMat);
+	//imshow("spl1",splittedMat[0]);
+	//imshow("spl2",splittedMat[1]);
+	//imshow("spl3",splittedMat[2]);
+
+	//imshow("inputImageHSV", inputImageHSV);
+	//waitKey(0);
+	//cvtColor(inputImageHSV, houghCircleInput, CV_HSV2BGR);
+	//imshow("houghCircleInput", houghCircleInput);
+	//waitKey(0);
+	//cvtColor(houghCircleInput, houghCircleInputGray, CV_BGR2GRAY);
+	//imshow("houghCircleInputGray", houghCircleInputGray);
+	//waitKey(0);
+	HoughCircles(splittedMat[2], circles, CV_HOUGH_GRADIENT,2, splittedMat[2].rows/4, 200, 100);
 	cout<<"circles size: %d"<<circles.size();
-	Point center(cvRound(circles[0][0]), cvRound(circles[0][1]));
-	int radius = cvRound(circles[0][2]);
-*/
+	Mat imageWithCircles;
+	//Point center(cvRound(circles[0][0]), cvRound(circles[0][1]));
+	//int radius = cvRound(circles[0][2]);
+    for( size_t i = 0; i < circles.size(); i++ )
+    {
+         Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
+         int radius = cvRound(circles[i][2]);
+         // draw the circle center
+         circle( imageWithCircles, center, 3, Scalar(0,255,0), -1, 8, 0 );
+         // draw the circle outline
+    }
+    imshow("BallDetector: imageWithCircles", imageWithCircles);
+    waitKey(0);
 	//imshow("BallDetector: field", field);
 
-	Mat onlyGreenImage;
-	inRange(inputImageHSV, Calibration::GetInstance()->MinGreenHSV, Calibration::GetInstance()->MaxGreenHSV, onlyGreenImage);
-	//imshow("BallDetector: onlyGreenImage", onlyGreenImage);
-	//waitKey(0);
-	Mat nonGreenImage;
-	bitwise_not(onlyGreenImage, nonGreenImage);
-	//imshow("BallDetector: nonGreenImage", nonGreenImage);
-	//waitKey(0);
-	Mat holesInField;
-	bitwise_and(nonGreenImage, field, holesInField);
-	//imshow("BallDetector: holesInField", holesInField);
-	//waitKey(0);
-	// Smooth image with blur and closing
-	medianBlur(holesInField, holesInField, 15);
-	CloseImage(holesInField, holesInField);
-	//imshow("BallDetector: holesInField after CloseImage", holesInField);
-	//waitKey(0);
-	ImageShowOnDebug("Holes in field", "BallDetector", holesInField);
-
-	vector< vector<Point> > contoursVector = FindContours(holesInField, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
-
-	if (contoursVector.size() == 0)
-	{
-		return new DetectedBall();
-	}
-
-	vector<Point2f> centersVector;
-	centersVector.resize(contoursVector.size());
-	vector<float> radiusesVector;
-	radiusesVector.resize(contoursVector.size());
-
-	float maxRatio = -1.0f;
-	int maxRatioIndex = -1;
-
-	// Get the contour with the maximum ratio between its area to the area of its enclosing circle.
-	for (size_t i = 0; i < contoursVector.size(); i++)
-	{
-		minEnclosingCircle(contoursVector[i], centersVector[i], radiusesVector[i]);
-		circle(holesInField, centersVector[i], radiusesVector[i], Colors::Blue, 2);
-
-		double holeArea = contourArea(contoursVector[i]);
-		double enclosingCircleArea = M_PI * pow(radiusesVector[i], 2);
-		double ratio = holeArea / enclosingCircleArea;
-
-		const float rationThreshold = 0.7;
-		const float radiusThreshold = 10;
-		if (ratio < rationThreshold || radiusesVector[i] < radiusThreshold)
-		{
-			continue;
-		}
-
-		if (maxRatio < ratio)
-		{
-			maxRatio = ratio;
-			maxRatioIndex = i;
-		}
-	}
-	// TODO Auto-generated destructor stub
-	if (maxRatioIndex == -1)
-	{
-		return new DetectedBall();
-	}
-
-	if (radiusesVector[maxRatioIndex] < 0.0f || radiusesVector[maxRatioIndex] > 10000.0f)
-	{
-		printf("Radius is corrupt in BallDetector.FindBall()");
-	}
-
-	ImageShowOnDebug("HolesInField", "BallDetector", holesInField);
-
-	float tilt = Motion::GetInstance()->GetHeadTilt().Tilt;
-	float distance =  0;//m_BallDistanceCalculator->CalculateDistance(centersVector[maxRatioIndex], (int)tilt);
-	return new DetectedBall(centersVector[maxRatioIndex], radiusesVector[maxRatioIndex], distance);
-	//circle(houghCircleInputGray, center, (float)radius, Colors::Blue, 2);
+	//Mat onlyGreenImage;
+	//inRange(inputImageHSV, Calibration::GetInstance()->MinGreenHSV, Calibration::GetInstance()->MaxGreenHSV, onlyGreenImage);
+	////imshow("BallDetector: onlyGreenImage", onlyGreenImage);
+	////waitKey(0);
+	//Mat nonGreenImage;
+	//bitwise_not(onlyGreenImage, nonGreenImage);
+	////imshow("BallDetector: nonGreenImage", nonGreenImage);
+	////waitKey(0);
+	//Mat holesInField;
+	//bitwise_and(nonGreenImage, field, holesInField);
+	////imshow("BallDetector: holesInField", holesInField);
+	////waitKey(0);
+	//// Smooth image with blur and closing
+	//medianBlur(holesInField, holesInField, 15);
+	//CloseImage(holesInField, holesInField);
+	////imshow("BallDetector: holesInField after CloseImage", holesInField);
+	////waitKey(0);
+	//ImageShowOnDebug("Holes in field", "BallDetector", holesInField);
+    //
+	//vector< vector<Point> > contoursVector = FindContours(holesInField, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
+    //
+	//if (contoursVector.size() == 0)
+	//{
+	//	return new DetectedBall();
+	//}
+    //
+	//vector<Point2f> centersVector;
+	//centersVector.resize(contoursVector.size());
+	//vector<float> radiusesVector;
+	//radiusesVector.resize(contoursVector.size());
+    //
+	//float maxRatio = -1.0f;
+	//int maxRatioIndex = -1;
+    //
+	//// Get the contour with the maximum ratio between its area to the area of its enclosing circle.
+	//for (size_t i = 0; i < contoursVector.size(); i++)
+	//{
+	//	minEnclosingCircle(contoursVector[i], centersVector[i], radiusesVector[i]);
+	//	circle(holesInField, centersVector[i], radiusesVector[i], Colors::Blue, 2);
+    //
+	//	double holeArea = contourArea(contoursVector[i]);
+	//	double enclosingCircleArea = M_PI * pow(radiusesVector[i], 2);
+	//	double ratio = holeArea / enclosingCircleArea;
+    //
+	//	const float rationThreshold = 0.7;
+	//	const float radiusThreshold = 10;
+	//	if (ratio < rationThreshold || radiusesVector[i] < radiusThreshold)
+	//	{
+	//		continue;
+	//	}
+    //
+	//	if (maxRatio < ratio)
+	//	{
+	//		maxRatio = ratio;
+	//		maxRatioIndex = i;
+	//	}
+	//}
+	//// TODO Auto-generated destructor stub
+	//if (maxRatioIndex == -1)
+	//{
+	//	return new DetectedBall();
+	//}
+    //
+	//if (radiusesVector[maxRatioIndex] < 0.0f || radiusesVector[maxRatioIndex] > 10000.0f)
+	//{
+	//	printf("Radius is corrupt in BallDetector.FindBall()");
+	//}
+    //
+	//ImageShowOnDebug("HolesInField", "BallDetector", holesInField);
+    //
+	//float tilt = Motion::GetInstance()->GetHeadTilt().Tilt;
+	//float distance =  0;//m_BallDistanceCalculator->CalculateDistance(centersVector[maxRatioIndex], (int)tilt);
+	//return new DetectedBall(centersVector[maxRatioIndex], radiusesVector[maxRatioIndex], distance);
+	//circle(splittedMat[2], center, (float)radius, Colors::Blue, 2);
 	//return new DetectedBall(center, (float)radius, 0);
-
+	return new DetectedBall();
 
 
 //	if (maxCentersForRecursiveFilter.size() < DEQUE_SIZE) {
