@@ -7,40 +7,38 @@
 #include "Communication.h"
 
 Communication::Communication(){
-	m_udp_listener = UdpListener::GetInstance();
+	mUdpListener = UdpListener::GetInstance();
 	//m_udp_sender = UdpSender::GetInstance();
 }
 
-Communication* Communication::m_instance = NULL;
+Communication* Communication::mInstance = NULL;
 Communication* Communication::GetInstance()
 {
-    if(m_instance == NULL)
+    if(mInstance == NULL)
     {
-    	m_instance = new Communication();
-        return m_instance;
+    	mInstance = new Communication();
+        return mInstance;
     }
     else
     {
-        return m_instance;
+        return mInstance;
     }
 }
 
 Communication::~Communication()
 {
-	Communication::m_instance = NULL;
+	Communication::mInstance = NULL;
 }
 
-RoboCupGameControlData* Communication::ReadAndClearData(){
-	RoboCupGameControlData* returnData = NULL;
-	if(m_shared_is_data_changed.SafeRead()){
-		returnData = m_shared_data.SafeRead();
-		bool clearFlag = false;
-		m_shared_is_data_changed.SafeWrite(&clearFlag);
-	}
+RoboCupGameControlData Communication::ReadAndClearFlag(){
+	RoboCupGameControlData returnData = mUdpListener->GetData().SafeRead();
+	bool clearFlag = false;
+	mUdpListener->GetIsChangedFlag().SafeWrite(&clearFlag);
 	return returnData;
 }
 
-void Communication::RaiseDataChanged(){
-	bool raise = true;
-	m_shared_is_data_changed.SafeWrite(&raise);
+bool Communication::isDataChanged(){
+	return mUdpListener->GetIsChangedFlag().SafeRead();
 }
+
+

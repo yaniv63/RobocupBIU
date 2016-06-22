@@ -15,14 +15,18 @@
 #include "PlayerInfo.h"
 #include <thread>
 #include "UdpUtils.h"
+#include "../Common/SharedMemory.h"
 
-class Communication;
 
 class UdpListener {
 
 public:
 	static UdpListener* GetInstance();
 	void inline stopThread();
+	SharedMemory<RoboCupGameControlData>& GetData();
+	SharedMemory<bool>& GetIsChangedFlag();
+	void SetIsChangedFlag(const bool& flag);
+
 
 private:
 	void Listen();
@@ -34,6 +38,8 @@ private:
 	HeaderType GetHeader();
 	HeaderType ParseHeader();
 	bool is_data_changed(RoboCupGameControlData* old_data, RoboCupGameControlData* new_data);
+	void RaiseDataChanged();
+	inline void WriteGameData(const RoboCupGameControlData& data);
 
 	enum{ BUFFER_LENGTH = 1000,HEADER_LENGTH=4};
 	const char* m_port_number;
@@ -48,6 +54,9 @@ private:
 	bool m_stop;
 	std::thread m_listen_thread;
 	static UdpListener* m_instance;
+
+	SharedMemory<RoboCupGameControlData> mData;
+    SharedMemory<bool> mIsDataChanged;
 };
 
 

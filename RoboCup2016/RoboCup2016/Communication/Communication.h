@@ -2,25 +2,22 @@
 #define COMM_H
 
 #include "UdpSender.h"
-#include "../Vision/SharedMemory.h"
+#include "UdpListener.h"
 
-class UdpListener;
-struct RoboCupGameControlData;
 
 class Communication {
 public:
 	static Communication* GetInstance();
 	~Communication();
-	RoboCupGameControlData* ReadAndClearData();
-	void RaiseDataChanged();
-	void WriteGameData(RoboCupGameControlData* data);
+	RoboCupGameControlData ReadAndClearFlag();
+	bool isDataChanged();
+
 private:
-	UdpListener* m_udp_listener;
-	UdpSender* m_udp_sender;
-	static Communication* m_instance;
+	UdpListener* mUdpListener;
+	UdpSender* mUdpSender;
+	static Communication* mInstance;
 	Communication();
-	SharedMemory<RoboCupGameControlData> m_shared_data;
-	SharedMemory<bool> m_shared_is_data_changed;
+
 };
 
 #endif

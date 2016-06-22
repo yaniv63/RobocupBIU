@@ -113,8 +113,8 @@ void UdpListener::Listen(){
 					  printf("header %s, packet number %d ,state %d,secRemaining %d,team number %d \n",newData.header,newData.packetNumber,newData.state,newData.secsRemaining,newData.teams[0].teamNumber);
 					  if (is_data_changed(&oldData, &newData)){
 						  cout << "Data changed!! " << endl;
-						  Communication::GetInstance()->WriteGameData(&newData);
-						  Communication::GetInstance()->RaiseDataChanged();
+						  WriteGameData(newData);
+						  RaiseDataChanged();
 					  }
 					  RoboCupGameControlReturnData returnData;
 					  returnData.player = 1;
@@ -131,7 +131,23 @@ void UdpListener::Listen(){
 	}
 }
 
+SharedMemory<RoboCupGameControlData>& UdpListener::GetData(){
+	return mData;
+}
 
+SharedMemory<bool>& UdpListener::GetIsChangedFlag(){
+	return mIsDataChanged;
+}
+
+
+void UdpListener::RaiseDataChanged(){
+	bool raise = true;
+	mIsDataChanged.SafeWrite(raise);
+}
+
+inline void UdpListener::WriteGameData(const RoboCupGameControlData& data){
+	mData.SafeWrite(data);
+}
 
 
 

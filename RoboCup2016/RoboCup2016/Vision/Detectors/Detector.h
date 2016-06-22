@@ -1,6 +1,6 @@
+#include "../../Common/SharedMemory.h"
 #include "../DetectedObjects/DetectedObject.h"
 #include "../VisionUtils.h"
-#include "../SharedMemory.h"
 
 #pragma once
 
@@ -20,7 +20,7 @@ protected:
 	virtual DetectedObject* DetectObject(Mat& inputImage) = 0;
 
 private:
-	SharedMemory<DetectedObject> m_sharedMemory;
+	SharedMemory<DetectedObject*> m_sharedMemory;
 };
 
 

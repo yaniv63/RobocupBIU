@@ -1,13 +1,13 @@
 #ifndef SHAREDMEMORY_H_
 #define SHAREDMEMORY_H_
 
-#include "DetectedObjects/DetectedObject.h"
+
 #include <semaphore.h>
 
 template<typename T>
 class SharedMemory {
 public:
-	SharedMemory(T* object){
+	SharedMemory(T object){
 		sem_init(&m_semaphore, 0, 1);
 		m_shraedObject = object;
 	}
@@ -15,21 +15,20 @@ public:
 		sem_init(&m_semaphore, 0, 1);
 	}
 	~SharedMemory(){
-		delete m_shraedObject;
 		sem_destroy(&m_semaphore);
 	}
 
-	T* SafeRead(){
+	T SafeRead(){
 		if (sem_wait(&m_semaphore) != 0){
 			cout << "Couldn't sem_wait\n";
 		}
-		T* objectToReturn = m_shraedObject;
+		T objectToReturn = m_shraedObject;
 		if (sem_post(&m_semaphore) != 0){
 			cout << "Couldn't sem_post\n";
 		}
 		return objectToReturn;
 	}
-	void SafeWrite(T* objectToWrite){
+	void SafeWrite(T objectToWrite){
 		if (sem_wait(&m_semaphore) != 0){
 			cout << "Couldn't sem_wait\n";
 		}
@@ -43,7 +42,7 @@ public:
 
 private:
 	sem_t m_semaphore;
-	T* m_shraedObject;
+	T m_shraedObject;
 };
 
 #endif /* SHAREDMEMORY_H_ */
