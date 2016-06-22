@@ -114,7 +114,10 @@ void* BrainActionAsync(void*)
 
 			case Walk:
 			{
-				motion->StartWalking(5,0,20);
+				motion->StartWalking(0,0,-24);
+				usleep(3000*1000);
+				motion->StopWalking();
+				//motion->StartWalking(5,0,0);
 
 
 

@@ -63,14 +63,14 @@ void LookForBall::CenterBall()
 		if (location.x < 300)
 		{
 			//turn head right
-			pan -=2;
+			pan +=2;
 			m_Motion->SetHeadTilt(HeadTilt(tilt, pan));
 
 		}
 		else if (location.x > 340)
 		{
 			//turn head left
-			pan +=2;
+			pan -=2;
 			m_Motion->SetHeadTilt(HeadTilt(tilt, pan));
 		}
 

@@ -11,6 +11,6 @@ class GoToBall : public State
 
 	private:
 	void turnToBall(float angleToBall);
-	const float factor = 1481.0;
+	const float factor = 1388.89;
 };
 
