@@ -55,8 +55,8 @@ DetectedObject* BallDetector::DetectObject(Mat& inputImageHSV)
          circle( imageWithCircles, center, 3, Scalar(0,255,0), -1, 8, 0 );
          // draw the circle outline
     }
-    imshow("BallDetector: imageWithCircles", imageWithCircles);
-    waitKey(0);
+  //  imshow("BallDetector: imageWithCircles", imageWithCircles);
+    //waitKey(0);
 	//imshow("BallDetector: field", field);
 
 	//Mat onlyGreenImage;
@@ -133,8 +133,10 @@ DetectedObject* BallDetector::DetectObject(Mat& inputImageHSV)
 	//float distance =  0;//m_BallDistanceCalculator->CalculateDistance(centersVector[maxRatioIndex], (int)tilt);
 	//return new DetectedBall(centersVector[maxRatioIndex], radiusesVector[maxRatioIndex], distance);
 	//circle(splittedMat[2], center, (float)radius, Colors::Blue, 2);
-	//return new DetectedBall(center, (float)radius, 0);
-	return new DetectedBall();
+    int radius1 = cvRound(circles[0][2]);
+    Point center1(cvRound(circles[0][0]), cvRound(circles[0][1]));
+	return new DetectedBall(center1, (float)radius1, 0);
+
 
 
 //	if (maxCentersForRecursiveFilter.size() < DEQUE_SIZE) {
