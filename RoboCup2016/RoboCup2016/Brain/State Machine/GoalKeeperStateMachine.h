@@ -18,6 +18,9 @@ public:
 	virtual ~GoalKeeperStateMachine();
 	virtual void Run();
 
+private:
+	GoalKeeperState* m_GKCurrentState;
+	GoalKeeperState* m_GKNextState;
 };
 
 #endif /* BRAIN_STATE_MACHINE_GOALKEEPERSTATEMACHINE_H_ */

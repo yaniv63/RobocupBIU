@@ -11,10 +11,13 @@
 #include "../../GoalKeeperState.h"
 
 class GoalKeeperLookForBall: public GoalKeeperState {
-public:
-	GoalKeeperLookForBall();
-	virtual ~GoalKeeperLookForBall();
-	virtual void Run();
+	private:
+		DetectedBall* m_GKdetectedBall;
+	public:
+		GoalKeeperLookForBall();
+		virtual ~GoalKeeperLookForBall();
+		virtual void Run();
+		DetectedBall* GetDetectedBall();
 };
 
 #endif /* BRAIN_STATE_MACHINE_STATES_GOALKEEPERLOOKFORBALL_H_ */

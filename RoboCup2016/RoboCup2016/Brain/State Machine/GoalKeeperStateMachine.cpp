@@ -8,7 +8,7 @@
 #include "GoalKeeperStateMachine.h"
 
 GoalKeeperStateMachine::GoalKeeperStateMachine() {
-	m_currentState = new GoalKeeperInit();
+	m_GKCurrentState = new GoalKeeperInit();
 }
 
 GoalKeeperStateMachine::~GoalKeeperStateMachine() {
@@ -19,40 +19,48 @@ void GoalKeeperStateMachine::Run()
 {
 	StateName stateName;
 	string stateVariable = "";
-	while (m_currentState != NULL)
+	while (m_GKCurrentState != NULL)
 	{
 		if (MotionStatus::FALLEN != STANDUP){
 			Motion::GetInstance()->GetUp();
-			m_currentState = new GoalKeeperInit(); //TODO - check
+			m_GKCurrentState = new GoalKeeperInit(); //TODO - check
 		}
 
-		m_currentState->Run();
-		stateName = m_currentState->Name();
-		stateVariable = m_currentState->GetStateVariable();
-		if (m_currentState!=NULL)
-			delete m_currentState;
+		m_GKCurrentState->Run();
+		stateName = m_GKCurrentState->Name();
+		stateVariable = m_GKCurrentState->GetStateVariable();
 
 		switch (stateName)
 		{
 		case GKState_Init:
-			m_nextState = new GoalKeeperLookForBall();
+			m_GKNextState = new GoalKeeperLookForBall();
 			break;
 
 		case GKState_LooKForBall:
 			if (stateVariable == "BallFound")
+			{   GoalKeeperLookForBall* lookForballPtr = dynamic_cast<GoalKeeperLookForBall*> (m_GKCurrentState);
+				DetectedBall* ball  = lookForballPtr ->GetDetectedBall();
+				m_GKNextState = new GoalKeeperFollowBall(ball);
+			}
+			break;
+
+		case GKState_FollowBall:
+			if (stateVariable == "BallFound")
 			{
-				//m_nextState = new GoalKeeperFollow();
+				//m_GKNextState = new GoalKeeperFollow();
 			}
 			break;
 
 		default:
-			m_nextState = NULL;
+			m_GKNextState = NULL;
 			break;
 		}
 		if (stateVariable == "FellDown"){
-			m_nextState = new GoalKeeperLookForBall();
+			m_GKNextState = new GoalKeeperLookForBall();
 		}
 
-		m_currentState = m_nextState;
+		if (m_GKCurrentState!=NULL)
+					delete m_GKCurrentState;
+		m_GKCurrentState = m_GKNextState;
 	}
 }

@@ -41,6 +41,11 @@ void GoalKeeperLookForBall::Run(){
 		//WriteLine("Ball found");
 		//LookForBall::CenterBall();
 		m_GKStateVariable = "BallFound";
+		m_GKdetectedBall = (DetectedBall*)m_Vision->Ball->Get();
 	}
 	return;
+}
+
+DetectedBall* GoalKeeperLookForBall::GetDetectedBall() {
+	return m_GKdetectedBall;
 }

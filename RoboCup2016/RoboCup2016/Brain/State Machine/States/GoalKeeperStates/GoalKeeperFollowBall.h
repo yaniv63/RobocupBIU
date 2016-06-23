@@ -13,10 +13,13 @@
 
 class GoalKeeperFollowBall: public GoalKeeperState
 {
-public:
-	GoalKeeperFollowBall();
-	virtual ~GoalKeeperFollowBall();
-	virtual void Run();
+	private:
+		DetectedBall* m_GKdetectedBall;
+	public:
+		GoalKeeperFollowBall();
+		GoalKeeperFollowBall(DetectedBall* GKdetectedBall);
+		virtual ~GoalKeeperFollowBall();
+		virtual void Run();
 };
 
 

@@ -9,7 +9,12 @@
 
 
 GoalKeeperFollowBall::GoalKeeperFollowBall() {
-		m_GKStateName = GKState_FollowBall;
+	m_GKStateName = GKState_FollowBall;
+}
+
+GoalKeeperFollowBall::GoalKeeperFollowBall(DetectedBall* GKdetectedBall) {
+	m_GKStateName = GKState_FollowBall;
+	m_GKdetectedBall = GKdetectedBall;
 }
 
 GoalKeeperFollowBall::~GoalKeeperFollowBall() {
