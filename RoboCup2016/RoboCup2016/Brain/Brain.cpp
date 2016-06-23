@@ -76,7 +76,9 @@ void* BrainActionAsync(void*)
 				Log::GetInstance()->Info("Starting to play", "Brain");
 				PlayerInfo info;
 				StateMachine* fsm;
+				cout << "before select statemachine type"<<endl;
 				if (info.isGoalkeeper == GOALKEEPER){
+					cout << "entered to goalkeeper statem machine"<<endl;
 					fsm = new GoalKeeperStateMachine();
 				}
 				else {
