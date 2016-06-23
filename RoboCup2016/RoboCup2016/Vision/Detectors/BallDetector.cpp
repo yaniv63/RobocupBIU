@@ -61,7 +61,6 @@ DetectedObject* BallDetector::DetectObject(Mat& inputImageHSV)
          circle( greenMatrixImage, center, radius, Scalar(0,0,255), 3, 8, 0 );
          // draw the circle outline
     }
-
     imshow("BallDetector: greenMatrixImage", greenMatrixImage);
     waitKey(10);
 	//imshow("BallDetector: field", field);
