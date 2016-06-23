@@ -26,8 +26,8 @@ Vision::Vision()
 	m_SaveVideo = false;
 	m_RunBallDetection = true;
 	m_RunGoalDetection = true;
-	m_RunLineDetection = true;
-	m_RunBallMovementCalc = true;
+	m_RunLineDetection = false;
+	m_RunBallMovementCalc = false;
 
 	// Video settings
 	if (m_SaveVideo)
