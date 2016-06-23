@@ -32,6 +32,7 @@ static const char* StatusStrings[] = { "Valid", "BallNotDetected", "InvalidTimeD
 class BallMovement
 {
 public:
+	BallMovement();
 	BallMovement(Status status);
 	BallMovement(JumpDirection direction, double msToJump);
 	void PrintDetailsOnImage(Mat image, Point startingPoint);

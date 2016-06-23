@@ -3,6 +3,7 @@
 #include "Detectors/LineDetector.h"
 #include "../Log/Log.h"
 #include "../Brain/Goalkeeper/BallMovementCalculator.h"
+#include "../Common/SharedMemory.h"
 
 #pragma once
 
@@ -22,6 +23,7 @@ public:
 	Detector* Gate;
 	Detector* Ball;
 	Detector* Line;
+	SharedMemory<BallMovement> BallMovementCalc;
 
 	BallMovementCalculator m_ballMovementCalculator;
 

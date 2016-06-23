@@ -115,8 +115,9 @@ void Vision::ProcessCurrentFrame(Mat& currentFrame)
 
 		if (m_RunBallMovementCalc)
 		{
-		TimedDetectedBall timedDetectedBall(*(DetectedBall*)Ball->Get());
-		BallMovement ballMovement = m_ballMovementCalculator.CalculateBallMovement(timedDetectedBall);
+			TimedDetectedBall timedDetectedBall(*(DetectedBall*)Ball->Get());
+			BallMovement ballMovement = m_ballMovementCalculator.CalculateBallMovement(timedDetectedBall);
+			BallMovementCalc.SafeWrite(ballMovement);
 		}
 	}
 

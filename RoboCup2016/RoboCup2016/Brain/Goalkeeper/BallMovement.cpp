@@ -12,6 +12,12 @@ BallMovement::BallMovement(JumpDirection direction, double msToJump)
 {
 }
 
+BallMovement::BallMovement()
+	: Direction(JumpDirection::NONE), MsToJump(-1), DetectionStatus(Status::NotEnoughSamples)
+{
+
+}
+
 BallMovement::BallMovement(Status status)
 	: Direction(JumpDirection::NONE), MsToJump(-1), DetectionStatus(status)
 {
