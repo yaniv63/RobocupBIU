@@ -8,14 +8,15 @@
 #ifndef BRAIN_GOALKEEPER_BALLMOVEMENTCALCULATOR_H_
 #define BRAIN_GOALKEEPER_BALLMOVEMENTCALCULATOR_H_
 
-#define NUM_OF_SAMPLES 3
 #define MAX_TIME_DIFF 1000000
+#define MIN_TIME_DIFF 1000
+#define MIN_LOCATION_DIFF 10
 #define CENTER_MARGIN 10
 
 #include "BallMovement.h"
-#include "Includes.h"
 #include "../../Vision/DetectedObjects/TimedDetectedBall.h"
-#include "LineApprox.h"
+#include "LeastSquareApproximation/ParabolaApprox.h"
+#include "LeastSquareApproximation/LineApprox.h"
 
 class BallMovementCalculator {
 public:
@@ -26,19 +27,23 @@ public:
 
 private:
 	void PushDetectedBallToQueue(TimedDetectedBall timedDetectedBall);
-	JumpDirection CalculateDirection(LineApprox ballMovementApprox);
-	int CalculateJumpingTime();
+	JumpDirection CalculateDirection(LeastSquareApprox* directionApprox);
+	double CalculateJumpingTime(LeastSquareApprox* timingApprox);
+
+	bool IsNewSampleRelevant(TimedDetectedBall timedDetectedBall);
 	bool IsTimeDiffValid();
+	bool IsLocationDiffValid();
+	bool IsEnoughSamples();
+
+	double GetRelativeTimeToFirstSample(double detectionTime);
 
 	TimedDetectedBall m_SamplesArray[NUM_OF_SAMPLES];
 
-	vector<float> GetTValues();
-	vector<float> GetBValues();
-	static float SumVector(vector<float> vector);
-	static float SumVectorPower2(vector<float> vector);
-	static float SumMultiplyVectors(vector<float> tVector, vector<float> bVector);
+	vector<double> GetYValues();
+	vector<double> GetXValues();
+	vector<double> GetTimes();
 
-	static LineApprox LeastSquaresApproximation(vector<float> t, vector<float> b);
+	void PrintCalculationData(Mat& image);
 };
 
 #endif /* BRAIN_GOALKEEPER_BALLMOVEMENTCALCULATOR_H_ */

@@ -17,7 +17,7 @@ public:
 	TimedDetectedBall(DetectedBall& detectedBall);
 	virtual ~TimedDetectedBall();
 
-	int usDetectionTime;
+	double DetectionTime;
 
 	virtual void PrintDetailsOnImage(Mat image);
 };

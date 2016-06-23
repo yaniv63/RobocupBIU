@@ -23,7 +23,6 @@ int main(int argc, char* argv[])
 	}
 
 	cout << "Program finished" << endl;
-
 	return 0;
 }
 

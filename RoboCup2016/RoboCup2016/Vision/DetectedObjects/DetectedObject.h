@@ -7,16 +7,16 @@
 class DetectedObject
 {
 public:
-	Point2f Location;
+	Point2d Location;
 	bool IsDetected;
 
 	virtual float Distance() = 0;
 	virtual void Draw(Mat& image) = 0;
 
-	DetectedObject(Point2f center, bool isFound);
+	DetectedObject(Point2d center, bool isFound);
 	virtual ~DetectedObject();
 
-	static Point2f UnknownLocation;
+	static Point2d UnknownLocation;
 };
 
 #endif /* DETECTEDOBJECT_H_ */

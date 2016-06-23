@@ -111,19 +111,16 @@ void* BrainActionAsync(void*)
 			}
 
 			//TODO: Finish options
-
 			case Walk:
 			{
 				motion->StartWalking(5,0,20);
-
-
-
 
 				/*while (MotionStatus::FALLEN == STANDUP)
 				{
 					//printf( "Robot is walking!\n");
 					//keep walking
 				}*/
+				break;
 			}
 
 			case TurnLeft:
@@ -155,6 +152,7 @@ void* BrainActionAsync(void*)
 					usleep(250*1000);
 					Walking::GetInstance()->X_MOVE_AMPLITUDE = i;
 				}
+				break;
 			}
 
 			case Reset:

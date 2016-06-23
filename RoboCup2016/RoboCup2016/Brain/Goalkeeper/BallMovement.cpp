@@ -7,7 +7,7 @@
 
 #include "BallMovement.h"
 
-BallMovement::BallMovement(JumpDirection direction, int msToJump)
+BallMovement::BallMovement(JumpDirection direction, double msToJump)
 	: Direction(direction), MsToJump(msToJump), DetectionStatus(Status::Valid)
 {
 }
@@ -18,17 +18,22 @@ BallMovement::BallMovement(Status status)
 
 }
 
-void BallMovement::PrintDetailsOnImage(Mat image)
+void BallMovement::PrintDetailsOnImage(Mat image, Point startingPoint)
 {
 	char message[256];
-	PrintMessageOnImage(image, "Ball Movement details:", Point(300,30));
+	PrintMessageOnImage(image, "Ball Movement details:", startingPoint);
 
 	sprintf(message, "Direction: %s", JumpDirectionStrings[Direction]);
-	PrintMessageOnImage(image, message, Point(300,50));
+	PrintMessageOnImage(image, message, Point(startingPoint.x, startingPoint.y + 20));
 
 	sprintf(message, "Time to jump: %f", MsToJump);
-	PrintMessageOnImage(image, message, Point(300,70));
+	cout << message << endl;
+	if (0 < MsToJump < 1000)
+	{
+		cout << "JUMP!!" << endl;
+	}
+	PrintMessageOnImage(image, message, Point(startingPoint.x, startingPoint.y + 40));
 
 	sprintf(message, "Status: %s", StatusStrings[DetectionStatus]);
-	PrintMessageOnImage(image, message, Point(300,90));
+	PrintMessageOnImage(image, message, Point(startingPoint.x, startingPoint.y + 60));
 }

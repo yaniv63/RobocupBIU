@@ -6,6 +6,8 @@
 #ifndef VISIONUTILS_H
 #define VISIONUTILS_H
 
+#define DEBUG_MODE 1
+
 extern Scalar minWhiteHSV;
 extern Scalar maxWhiteHSV;
 extern Scalar minGreenHSV;
@@ -38,8 +40,9 @@ vector< vector<Point> > FindContours(Mat inputImage, int mode, int method);
 
 void ImageShowOnDebug(const string& state, const string& category, Mat image);
 
-void DrawCircle(Mat &image, Point2f &point, Scalar color = Scalar(0,0,255), int thickness = 1);
+void DrawCircle(Mat &image, Point2d &point, Scalar color = Scalar(0,0,255), int thickness = 1);
 void DrawRectangle(Mat &image, RotatedRect &rect, Scalar color = Scalar(0,0,255), int thickness = 1);
-void PrintMessageOnImage(Mat &src, const char* message, Point location);
+void PrintMessageOnImage(Mat &src, const char* message, Point location, double fontScale = Font_Scale);
 
+double GetCurrentTime();
 #endif

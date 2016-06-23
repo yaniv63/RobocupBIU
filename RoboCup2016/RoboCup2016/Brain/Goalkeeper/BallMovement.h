@@ -22,20 +22,22 @@ static const char* JumpDirectionStrings[] = { "None", "Left", "Right", "Center" 
 enum Status {
 	Valid,
 	BallNotDetected,
-	InvalidTimeDiff
+	InvalidTimeDiff,
+	InvalidLocationDiff,
+	NotEnoughSamples
 };
 
-static const char* StatusStrings[] = { "Valid", "BallNotDetected", "InvalidTimeDiff" };
+static const char* StatusStrings[] = { "Valid", "BallNotDetected", "InvalidTimeDiff", "InvalidLocationDiff", "NotEnoughSamples" };
 
 class BallMovement
 {
 public:
 	BallMovement(Status status);
-	BallMovement(JumpDirection direction, int msToJump);
-	void PrintDetailsOnImage(Mat image);
+	BallMovement(JumpDirection direction, double msToJump);
+	void PrintDetailsOnImage(Mat image, Point startingPoint);
 
 	JumpDirection Direction;
-	int MsToJump;
+	double MsToJump;
 	Status DetectionStatus;
 
 	static BallMovement BallNotDetected()
@@ -47,6 +49,18 @@ public:
 	static BallMovement InvalidTimeDiff()
 	{
 		BallMovement ballMovement(Status::InvalidTimeDiff);
+		return ballMovement;
+	}
+
+	static BallMovement InvalidLocationDiff()
+	{
+		BallMovement ballMovement(Status::InvalidLocationDiff);
+		return ballMovement;
+	}
+
+	static BallMovement NotEnoughSamples()
+	{
+		BallMovement ballMovement(Status::NotEnoughSamples);
 		return ballMovement;
 	}
 };

@@ -2,6 +2,7 @@
 #include "Detectors/GateDetector.h"
 #include "Detectors/LineDetector.h"
 #include "../Log/Log.h"
+#include "../Brain/Goalkeeper/BallMovementCalculator.h"
 
 #pragma once
 
@@ -22,12 +23,17 @@ public:
 	Detector* Ball;
 	Detector* Line;
 
+	BallMovementCalculator m_ballMovementCalculator;
+
 	bool IsVisionThreadRunning;
 
 	void ProcessCurrentFrame(Mat& frame);
 
 	void StartBallDetection();
 	void StopBallDetection();
+
+	void StartBallMovementCalc();
+	void StopBallMovementCalc();
 
 	void StartGoalDetection();
 	void StopGoalDetection();
@@ -47,6 +53,7 @@ private:
 
 	// Whether to run ball\Goal\Line detection during the Vision run.
 	bool m_RunBallDetection;
+	bool m_RunBallMovementCalc;
 	bool m_RunGoalDetection;
 	bool m_RunLineDetection;
 

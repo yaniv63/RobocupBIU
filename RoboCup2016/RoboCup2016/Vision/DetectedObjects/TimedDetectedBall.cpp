@@ -10,15 +10,13 @@
 TimedDetectedBall::TimedDetectedBall()
 	:DetectedBall()
 {
-	usDetectionTime = -1;
+	DetectionTime = -1;
 }
 
 TimedDetectedBall::TimedDetectedBall(DetectedBall& detectedBall)
 	: DetectedBall(detectedBall)
 {
-	timeval timev;
-	gettimeofday(&timev, 0);
-	usDetectionTime = timev.tv_usec;
+	DetectionTime = GetCurrentTime();
 }
 
 TimedDetectedBall::~TimedDetectedBall()
@@ -30,7 +28,7 @@ void TimedDetectedBall::PrintDetailsOnImage(Mat image)
 {
 	char message[256];
 	DetectedBall::PrintDetailsOnImage(image);
-	sprintf(message, "Detection time: %d", usDetectionTime);
+	sprintf(message, "Detection time: %f", DetectionTime);
 	PrintMessageOnImage(image, message, Point(0,210));
 
 }

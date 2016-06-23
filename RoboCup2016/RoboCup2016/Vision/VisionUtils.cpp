@@ -10,8 +10,7 @@ namespace Colors
 
 void ImageShowOnDebug(const string& state, const string& category, Mat image)
 {
-	#define DEBUG 0
-	if (DEBUG == 1)
+	if (DEBUG_MODE == 1)
 	{
 		string winName = category + " - " + state;
 		namedWindow(winName, CV_WINDOW_NORMAL);
@@ -19,7 +18,7 @@ void ImageShowOnDebug(const string& state, const string& category, Mat image)
 	}
 }
 
-void DrawCircle(Mat &image, Point2f &point, Scalar color, int thickness)
+void DrawCircle(Mat &image, Point2d &point, Scalar color, int thickness)
 {
 	circle(image, point, 10, color, 1);
 }
@@ -105,7 +104,14 @@ vector< vector<Point> > FindContours(Mat inputImage, int mode, int method)
 	return contoursVector;
 }
 
-void PrintMessageOnImage(Mat &src, const char* message, Point location)
+void PrintMessageOnImage(Mat &src, const char* message, Point location, double fontScale)
 {
-	putText(src, message, location, Font_Type, Font_Scale, Font_Colour, 2); //Display the text in image window
+	putText(src, message, location, Font_Type, fontScale, Font_Colour, 2); //Display the text in image window
+}
+
+double GetCurrentTime()
+{
+	timeval time;
+	gettimeofday(&time, 0);
+	return time.tv_sec + time.tv_usec/(double)1000000 - 1466622800;
 }
