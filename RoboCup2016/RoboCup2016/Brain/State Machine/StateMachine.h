@@ -18,6 +18,8 @@ public:
 private:
 	State* m_currentState;
 	State* m_nextState;
+
+	bool IsNewRefereeMsg();
 };
 
 #endif
