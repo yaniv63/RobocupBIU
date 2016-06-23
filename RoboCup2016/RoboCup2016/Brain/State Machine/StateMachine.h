@@ -9,13 +9,15 @@ class StateMachine
 {
 public:
 	StateMachine();
+	StateMachine(State* state);
 	~StateMachine();
 
 	void SetCurrent(State* state);
 
-	void Run();
+	virtual void Run();
 
-private:
+
+protected:
 	State* m_currentState;
 	State* m_nextState;
 };

@@ -16,7 +16,6 @@ enum StateName
 };
 
 
-
 enum StatePageNum
 {
 	Page_Init,
@@ -47,9 +46,9 @@ public:
 
 	virtual void Run() = 0;
 
-	string NameToString();
+	virtual string NameToString();
 
-	virtual StateName Name();
+	StateName Name();
 
 	virtual string GetStateVariable();
 

@@ -11,6 +11,10 @@ StateMachine::StateMachine()
 	m_currentState = new Init();
 }
 
+StateMachine::StateMachine(State* state){
+	m_currentState = state;
+}
+
 StateMachine::~StateMachine()
 {
 }

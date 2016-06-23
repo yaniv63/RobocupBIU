@@ -1,5 +1,6 @@
 #include "../Log/Log.h"
 #include "State Machine/StateMachine.h"
+#include "State Machine/GoalKeeperStateMachine.h"
 
 #pragma once
 

@@ -7,7 +7,7 @@ class LookForBall : public State
 	virtual ~LookForBall();
 
 	virtual void Run();
-	void CenterBall();
+	static void CenterBall();
 
 	private:
 	LookDirection m_lookDirection;

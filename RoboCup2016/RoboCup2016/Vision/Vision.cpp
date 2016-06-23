@@ -79,11 +79,13 @@ void Vision::Run()
 				Mat currentFrame;
 				m_VideoCapture >> currentFrame;
 
+
 				//timeval timev;
 				//gettimeofday(&timev, 0);
 				//cout << "Before: " << timev.tv_usec << endl;
 				Vision::GetInstance()->ProcessCurrentFrame(currentFrame);
 				//gettimeofday(&timev, 0);
+
 				//cout << "After: " << timev.tv_usec << endl;
 
 				imshow("Output", currentFrame);

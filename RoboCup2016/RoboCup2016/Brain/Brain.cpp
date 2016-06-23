@@ -1,5 +1,6 @@
 #include "Brain.h"
 #include "MenuOption.h"
+#include "../Common/PlayerInfo.h"
 
 // Declartion of the thread method.
 void* BrainActionAsync(void*);
@@ -46,7 +47,7 @@ void* BrainActionAsync(void*)
 
 	bool terminate = false;
 	Motion* motion = Motion::GetInstance();
-	motion->StartEngines();
+	//motion->StartEngines();
 
 	/*bool flag;
 	RoboCupGameControlData Data;
@@ -73,9 +74,19 @@ void* BrainActionAsync(void*)
 			case Play:
 			{
 				Log::GetInstance()->Info("Starting to play", "Brain");
-				StateMachine fsm;
-				fsm.Run();
+				PlayerInfo info;
+				StateMachine* fsm;
+				if (info.isGoalkeeper == GOALKEEPER){
+					fsm = new GoalKeeperStateMachine();
+				}
+				else {
+					fsm = new StateMachine();
+				}
+				fsm->Run();
 				terminate = true;
+				if(fsm != NULL){
+				delete fsm;
+				}
 				break;
 			}
 			case Stand:
@@ -123,7 +134,9 @@ void* BrainActionAsync(void*)
 				{
 					//printf( "Robot is walking!\n");
 					//keep walking
+<<<<<<< Updated upstream
 				}*/
+				break;
 			}
 
 			case TurnLeft:
@@ -155,6 +168,7 @@ void* BrainActionAsync(void*)
 					usleep(250*1000);
 					Walking::GetInstance()->X_MOVE_AMPLITUDE = i;
 				}
+				break;
 			}
 
 			case Reset:
