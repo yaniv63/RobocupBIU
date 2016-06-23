@@ -24,12 +24,14 @@ DetectedObject* BallDetector::DetectObject(Mat& inputImageHSV)
 	//	// Cannot find field - Ball not found.
 	//	return new DetectedBall();
 	//}
-
-	Mat houghCircleInput, houghCircleInputGray, greenMatrixImage;
+    //
+	Mat houghCircleInput, houghCircleInputGray, greenMatrixImage, originalBGRImage;
 	vector<Vec3f> circles;
 	cvtColor(inputImageHSV, greenMatrixImage, CV_HSV2BGR);
+	cvtColor(greenMatrixImage, houghCircleInputGray, CV_BGR2GRAY);
 	vector<Mat> splittedMat;
 	split(greenMatrixImage,splittedMat);
+
 	//imshow("spl1",splittedMat[0]);
 	//imshow("spl2",splittedMat[1]);
 	//imshow("spl3",splittedMat[2]);
@@ -42,21 +44,26 @@ DetectedObject* BallDetector::DetectObject(Mat& inputImageHSV)
 	//cvtColor(houghCircleInput, houghCircleInputGray, CV_BGR2GRAY);
 	//imshow("houghCircleInputGray", houghCircleInputGray);
 	//waitKey(0);
-	HoughCircles(splittedMat[2], circles, CV_HOUGH_GRADIENT,2, splittedMat[2].rows/4, 200, 100);
+	//splittedMat[0] = splittedMat[1] - splittedMat[2];
+	//HoughCircles(splittedMat[1], circles, CV_HOUGH_GRADIENT,2, splittedMat[1].rows/4, 200, 100);
+	HoughCircles(houghCircleInputGray, circles, CV_HOUGH_GRADIENT,6, houghCircleInputGray.rows/4, 200, 100);
 	cout<<"circles size: %d"<<circles.size();
-	Mat imageWithCircles;
-	//Point center(cvRound(circles[0][0]), cvRound(circles[0][1]));
-	//int radius = cvRound(circles[0][2]);
+	//Mat greenMatrixImage;
+	Point center(cvRound(circles[0][0]), cvRound(circles[0][1]));
+	int radius = cvRound(circles[0][2]);
     for( size_t i = 0; i < circles.size(); i++ )
     {
          Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
          int radius = cvRound(circles[i][2]);
          // draw the circle center
-         circle( imageWithCircles, center, 3, Scalar(0,255,0), -1, 8, 0 );
+         //circle(greenMatrixImage, center, (float)radius, Colors::Blue, 2);
+         circle( greenMatrixImage, center, 3, Scalar(0,255,0), -1, 8, 0 );
+         circle( greenMatrixImage, center, radius, Scalar(0,0,255), 3, 8, 0 );
          // draw the circle outline
     }
-    imshow("BallDetector: imageWithCircles", imageWithCircles);
-    waitKey(0);
+
+    imshow("BallDetector: greenMatrixImage", greenMatrixImage);
+    waitKey(10);
 	//imshow("BallDetector: field", field);
 
 	//Mat onlyGreenImage;
@@ -78,8 +85,8 @@ DetectedObject* BallDetector::DetectObject(Mat& inputImageHSV)
 	////waitKey(0);
 	//ImageShowOnDebug("Holes in field", "BallDetector", holesInField);
     //
-	//vector< vector<Point> > contoursVector = FindContours(holesInField, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
-    //
+	////vector< vector<Point> > contoursVector = FindContours(holesInField, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
+	//vector< vector<Point> > contoursVector = FindContours(holesInField, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
 	//if (contoursVector.size() == 0)
 	//{
 	//	return new DetectedBall();
@@ -132,9 +139,11 @@ DetectedObject* BallDetector::DetectObject(Mat& inputImageHSV)
 	//float tilt = Motion::GetInstance()->GetHeadTilt().Tilt;
 	//float distance =  0;//m_BallDistanceCalculator->CalculateDistance(centersVector[maxRatioIndex], (int)tilt);
 	//return new DetectedBall(centersVector[maxRatioIndex], radiusesVector[maxRatioIndex], distance);
-	//circle(splittedMat[2], center, (float)radius, Colors::Blue, 2);
-	//return new DetectedBall(center, (float)radius, 0);
-	return new DetectedBall();
+	//circle(splittedMat[1], center, (float)radius, Colors::Blue, 2);
+    circle(houghCircleInputGray, center, (float)radius, Colors::Blue, 2);
+
+	return new DetectedBall(center, (float)radius, 0);
+	//return new DetectedBall();
 
 
 //	if (maxCentersForRecursiveFilter.size() < DEQUE_SIZE) {

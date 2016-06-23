@@ -9,7 +9,7 @@ void Debug()
 
 int main(int argc, char* argv[])
 {
-	Brain::GetInstance()->RunThread();
+	//Brain::GetInstance()->RunThread();
 	Vision::GetInstance()->Run();
 
 	char key;
