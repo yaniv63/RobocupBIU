@@ -17,5 +17,6 @@ GoalKeeperWave::~GoalKeeperWave() {
 }
 
 void GoalKeeperWave::Run(){
+	cout <<"inside GoalKeeperWave "<<endl;
 
 }

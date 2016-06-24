@@ -17,5 +17,6 @@ GoalKeeperJumpLeft::~GoalKeeperJumpLeft() {
 }
 
 void GoalKeeperJumpLeft::Run(){
+	cout <<"in GoalKeeperJumpLeft "<<endl;
 
 }

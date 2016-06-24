@@ -8,40 +8,36 @@
 #include "GoalKeeperFollowBall.h"
 
 
-GoalKeeperFollowBall::GoalKeeperFollowBall() {
+GoalKeeperFollowBall::GoalKeeperFollowBall():MIN_MS_TO_JUMP(2500) {
 	m_GKStateName = GKState_FollowBall;
-	MIN_MS_TO_JUMP = 2500;
-}
-
-GoalKeeperFollowBall::GoalKeeperFollowBall(DetectedBall* GKdetectedBall) {
-	m_GKStateName = GKState_FollowBall;
-	m_GKdetectedBall = GKdetectedBall;
-	MIN_MS_TO_JUMP = 2500;
+	Vision::GetInstance()->StartBallMovementCalc();
 }
 
 GoalKeeperFollowBall::~GoalKeeperFollowBall() {
-	// TODO Auto-generated destructor stub
+	Vision::GetInstance()->StopBallMovementCalc();
 }
 
 void GoalKeeperFollowBall::Run(){
-
-	BallMovement ballMovement = vision.GetBallMovement();
-	while ((ballMovement.status != "valid") || (ballMovement.MsToJump > MIN_MS_TO_JUMP)){
-		ballMovement = vision.GetBallMovement(m_GKdetectedBall);
+	cout <<"in GoalKeeperFollowBall "<<endl;
+	int cnt_try=0;
+	BallMovement ballMovement = Vision::GetInstance()->BallMovementCalc.SafeRead();
+	while (((ballMovement.DetectionStatus != Valid) || (ballMovement.MsToJump > MIN_MS_TO_JUMP)) && (cnt_try<4)){
+		cnt_try++;
+		ballMovement = Vision::GetInstance()->BallMovementCalc.SafeRead();
 	}
 
 	switch (ballMovement.Direction){
-		case "Left":
-			stateVariable == "JumpLeft";
+		case LEFT:
+			m_GKStateVariable == "JumpLeft";
 			break;
-		case "Right":
-			stateVariable == "JumpRight";
+		case RIGHT:
+			m_GKStateVariable == "JumpRight";
 			break;
-		case "Wave":
-			stateVariable == "Wave";
+		case CENTER:
+			m_GKStateVariable == "Wave";
 			break;
-		default:
-			stateVariable == "None";
+		default: /*also covers if cnt_try is bigger than 3*/
+			m_GKStateVariable == "None";
 			break;
 	}
 }

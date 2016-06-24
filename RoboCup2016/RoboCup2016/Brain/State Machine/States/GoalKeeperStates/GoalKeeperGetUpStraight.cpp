@@ -17,5 +17,5 @@ GoalKeeperGetUpStraight::~GoalKeeperGetUpStraight() {
 }
 
 void GoalKeeperGetUpStraight::Run(){
-
+	cout <<"in GoalKeeperGetUpStraight "<<endl;
 }

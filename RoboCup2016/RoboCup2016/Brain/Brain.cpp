@@ -47,7 +47,7 @@ void* BrainActionAsync(void*)
 
 	bool terminate = false;
 	Motion* motion = Motion::GetInstance();
-	//motion->StartEngines();
+	motion->StartEngines();
 
 	/*bool flag;
 	RoboCupGameControlData Data;

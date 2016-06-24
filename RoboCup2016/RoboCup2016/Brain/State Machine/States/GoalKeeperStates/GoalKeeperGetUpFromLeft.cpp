@@ -17,5 +17,6 @@ GoalKeeperGetUpFromLeft::~GoalKeeperGetUpFromLeft() {
 }
 
 void GoalKeeperGetUpFromLeft::Run(){
+	cout <<"in GoalKeeperGetUpFromLeft "<<endl;
 
 }

@@ -17,7 +17,6 @@ class GoalKeeperLookForBall: public GoalKeeperState {
 		GoalKeeperLookForBall();
 		virtual ~GoalKeeperLookForBall();
 		virtual void Run();
-		DetectedBall* GetDetectedBall();
 };
 
 #endif /* BRAIN_STATE_MACHINE_STATES_GOALKEEPERLOOKFORBALL_H_ */

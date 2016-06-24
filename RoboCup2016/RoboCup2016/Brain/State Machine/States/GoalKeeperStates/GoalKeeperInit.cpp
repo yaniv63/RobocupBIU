@@ -16,5 +16,6 @@ GoalKeeperInit::~GoalKeeperInit() {
 }
 
 void GoalKeeperInit::Run() {
+	cout <<"in GoalKeeperInit "<<endl;
 
 }
