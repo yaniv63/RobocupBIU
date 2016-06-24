@@ -26,7 +26,8 @@ Vision::Vision()
 	m_SaveVideo = false;
 	m_RunBallDetection = true;
 	m_RunGoalDetection = true;
-	m_RunLineDetection = true;
+	m_RunLineDetection = false;
+	m_RunBallMovementCalc = false;
 
 	// Video settings
 	if (m_SaveVideo)
@@ -79,15 +80,7 @@ void Vision::Run()
 				Mat currentFrame;
 				m_VideoCapture >> currentFrame;
 
-
-				//timeval timev;
-				//gettimeofday(&timev, 0);
-				//cout << "Before: " << timev.tv_usec << endl;
 				Vision::GetInstance()->ProcessCurrentFrame(currentFrame);
-				//gettimeofday(&timev, 0);
-
-				//cout << "After: " << timev.tv_usec << endl;
-
 				imshow("Output", currentFrame);
 				key = waitKey(1);
 
@@ -118,6 +111,13 @@ void Vision::ProcessCurrentFrame(Mat& currentFrame)
 
 	if (m_RunBallDetection) {
 		Ball->Detect(currentFrame);
+
+		if (m_RunBallMovementCalc)
+		{
+			TimedDetectedBall timedDetectedBall(*(DetectedBall*)Ball->Get());
+			BallMovement ballMovement = m_ballMovementCalculator.CalculateBallMovement(timedDetectedBall);
+			BallMovementCalc.SafeWrite(ballMovement);
+		}
 	}
 
 	if (m_RunLineDetection) {
@@ -137,6 +137,15 @@ void Vision::StartBallDetection()
 void Vision::StopBallDetection()
 {
 	m_RunBallDetection = false;
+}
+
+void Vision::StartBallMovementCalc()
+{
+	m_RunBallMovementCalc = true;
+}
+void Vision::StopBallMovementCalc()
+{
+	m_RunBallMovementCalc = false;
 }
 
 void Vision::StartGoalDetection()
