@@ -90,7 +90,7 @@ DetectedObject* BallDetector::DetectObject(Mat& inputImageHSV)
 	ImageShowOnDebug("HolesInField", "BallDetector", holesInField);
 
 	float tilt = Motion::GetInstance()->GetHeadTilt().Tilt;
-	float distance =  0;//m_BallDistanceCalculator->CalculateDistance(centersVector[maxRatioIndex], (int)tilt);
+	float distance = m_BallDistanceCalculator->CalculateDistance(centersVector[maxRatioIndex], radiusesVector[maxRatioIndex], (int)tilt);
 	return new DetectedBall(centersVector[maxRatioIndex], radiusesVector[maxRatioIndex], distance);
 
 

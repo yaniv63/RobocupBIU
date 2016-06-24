@@ -42,27 +42,39 @@ string DistanceDBBuilder::intToString(int number)
 
 map<int,int> DistanceDBBuilder::CreateDatabse(Mat whiteImage, int zeroPixelDistance)
 {
-	vector<int> distances = { 10, 20, 30 };
-
-	ofstream myfile("a.txt");
+	ofstream myfile("/home/robot/src/RobocupBIU/RoboCup2016/DistanceCalculator/log.txt");
 
 	map<int, int> result;
 	int middleColumn = 640 / 2;
 
+	result[0] = zeroPixelDistance;
+
+	int distance = zeroPixelDistance;
 	int blockNumber = 0;
 	int pixelsCount = 0;
-	for (int row = 480 - 1;
-			row > 0 && static_cast<int>(distances.size()) > blockNumber;
-			row--) {
+	for (int row = FRAME_HEIGHT - 1;
+			row > 0 && NUM_OF_BLOCKS > blockNumber && distance < 250;
+			row--)
+	{
 		int currentPixel = (int) whiteImage.at<uchar>(row, middleColumn);
 		int nextPixel = (int) whiteImage.at<uchar>(row - 1, middleColumn);
 
 		myfile << "Row: " << FRAME_HEIGHT - row << ", Pixel: "
 				<< (currentPixel == 255 ? "W" : "B") << endl;
 
-		if (nextPixel != currentPixel) {
-			result[distances[blockNumber]] = pixelsCount;
+		if (nextPixel != currentPixel)
+		{
+			result[pixelsCount] = distance;
 			blockNumber++;
+
+			if (blockNumber < 20)
+			{
+				distance += 5;
+			}
+			else
+			{
+				distance +=10;
+			}
 		}
 
 		pixelsCount++;
@@ -73,6 +85,8 @@ map<int,int> DistanceDBBuilder::CreateDatabse(Mat whiteImage, int zeroPixelDista
 		myfile << "Distance: " << it->first << ", Pixels: " << it->second
 				<< endl;
 	}
+
+	myfile.close();
 
 	return result;
 }

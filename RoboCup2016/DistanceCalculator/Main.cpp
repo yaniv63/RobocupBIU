@@ -26,55 +26,58 @@ int main()
 	DistanceDBBuilder distanceDBBuilder;
 
 	VideoCapture videoCapture;
+	videoCapture.set(CV_CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT);
+	videoCapture.set(CV_CAP_PROP_FRAME_WIDTH, FRAME_WIDTH);
 	videoCapture.open(0);
-	namedWindow("Output", CV_WINDOW_AUTOSIZE);
 	int tilt = MinTilt;
 
 	cout << "Press \"s\" to continue. Current tilt: " << tilt << endl;
 	while(true)
 		{
 			Mat currentFrame;
+//			videoCapture.open("/home/robot/smaple.jpg");
 			videoCapture >> currentFrame;
 
-			Mat output;
-			output = currentFrame.clone();
-			DrawMiddleColumn(output);
-
-			imshow("Output", output);
+			imshow("Output", currentFrame);
 
 			cvtColor(currentFrame, currentFrame, CV_BGR2HSV);
 			Mat whiteImage;
 			inRange(currentFrame, calibration->MinWhiteHSV, calibration->MaxWhiteHSV, whiteImage);
 
-			int morph_size = 2;
+			int morph_size = 3;
 			Mat element = getStructuringElement(MORPH_RECT,
 					Size(2 * morph_size + 1, 2 * morph_size + 1),
 					Point(morph_size, morph_size));
-			morphologyEx(whiteImage, whiteImage, MORPH_OPEN, element);
+			medianBlur(whiteImage, whiteImage, 3);
 
-			imshow("White", whiteImage);
+			Mat whiteOutput = whiteImage.clone();
+			cvtColor(whiteOutput, whiteOutput, CV_GRAY2BGR);
+			DrawMiddleColumn(whiteOutput);
+			//morphologyEx(whiteImage, whiteImage, MORPH_OPEN, element);
 
-			char exitKey = waitKey(1);
+			imshow("White", whiteOutput);
+
+			char exitKey = waitKey(30);
 			if(exitKey == 'q')
 			{
 				break;
 			}
 			if(exitKey == 's')
 			{
-				// Motion::GetInstance()->SetHeadTilt(HeadTilt(0, tilt));
+				//Motion::GetInstance()->SetHeadTilt(HeadTilt(0, tilt));
 				distanceDBBuilder.CreateDatabaseForTilt(whiteImage, tilt);
-				tilt += TiltDelta;
 				cout << "Press \"s\" to continue. Current tilt: " << tilt << endl;
 			}
 		}
 
+	cout << "Distance DB finished" << endl;
 	return 0;
 }
 
 void DrawMiddleColumn(Mat &image)
 {
-	int middleColumn = 640 / 2;
-	for (int row = 480 - 1; row > 0 ; row--)
+	int middleColumn = FRAME_WIDTH / 2;
+	for (int row = FRAME_HEIGHT - 1; row > 0 ; row--)
 	{
 		image.at<Vec3b>(row, middleColumn)[0] = 255;
 		image.at<Vec3b>(row, middleColumn)[1] = 0;

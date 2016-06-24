@@ -11,7 +11,7 @@
 #include "Includes.h"
 #include "Constants.h"
 #include "../Calibrator/Calibration.h"
-
+#include <numeric>
 #include "DistanceDBConstants.h"
 #include "DatabaseWrapper.h"
 

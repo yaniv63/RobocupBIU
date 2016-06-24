@@ -16,7 +16,7 @@ public:
 	BallDistanceCalculator();
 	virtual ~BallDistanceCalculator();
 
-	int CalculateDistance(Point2f ballLocation, int headTilt);
+	int CalculateDistance(Point2f ballLocation, float radius, int headTilt);
 
 private:
 	vector<string> FindFilesInFolder(const char* folderPath);
