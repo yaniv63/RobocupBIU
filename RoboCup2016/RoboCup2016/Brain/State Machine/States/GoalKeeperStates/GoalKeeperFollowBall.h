@@ -14,7 +14,9 @@
 class GoalKeeperFollowBall: public GoalKeeperState
 {
 	private:
+		const double MIN_MS_TO_JUMP;
 		DetectedBall* m_GKdetectedBall;
+		BallMovementCalculator m_BallMovementCalculator;
 	public:
 		GoalKeeperFollowBall();
 		GoalKeeperFollowBall(DetectedBall* GKdetectedBall);

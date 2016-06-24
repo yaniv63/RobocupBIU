@@ -45,10 +45,40 @@ void GoalKeeperStateMachine::Run()
 			break;
 
 		case GKState_FollowBall:
-			if (stateVariable == "BallFound")
-			{
-				//m_GKNextState = new GoalKeeperFollow();
-			}
+			if 		 (stateVariable == "JumpLeft")	m_GKNextState = new GoalKeeperJumpLeft();
+			else if  (stateVariable == "JumpRight")	m_GKNextState = new GoalKeeperJumpRight();
+			else if	 (stateVariable == "Wave")		m_GKNextState = new GoalKeeperWave();
+			else /*None*/ m_GKNextState = new GoalKeeperLookForBall();
+			break;
+
+		case GKState_JumpRight:
+			/*Motion jump to right - complete*/
+			m_GKNextState = new GoalKeeperGetUpFromRight();
+			break;
+
+		case GKState_JumpLeft:
+			/*Motion jump to left - complete*/
+			m_GKNextState = new GoalKeeperGetUpFromLeft();
+			break;
+
+		case GKState_Wave:
+			/*Motion wave or bend/sit - need to complete*/
+			m_GKNextState = new GoalKeeperGetUpStraight();
+			break;
+
+		case GKState_GetUpFromRight:
+			/*Motion get up + return to goal center- need to complete*/
+			m_GKNextState = new GoalKeeperLookForBall();
+			break;
+
+		case GKState_GetUpFromLeft:
+			/*Motion get up + return to goal center- need to complete*/
+			m_GKNextState = new GoalKeeperLookForBall();
+			break;
+
+		case GKState_GetUpStraight:
+			/*Motion get up - need to complete*/
+			m_GKNextState = new GoalKeeperLookForBall();
 			break;
 
 		default:
