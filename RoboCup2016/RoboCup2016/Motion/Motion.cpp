@@ -83,7 +83,7 @@ void Motion::StartWalking()
 {
 	Head::GetInstance()->m_Joint.SetEnableHeadOnly(true, true);
 	Walking::GetInstance()->m_Joint.SetEnableBodyWithoutHead(true, true);
-	Walking::GetInstance()->X_MOVE_AMPLITUDE = 0;
+	Walking::GetInstance()->X_MOVE_AMPLITUDE = 5;
 	Walking::GetInstance()->Y_MOVE_AMPLITUDE = 0;
 	Walking::GetInstance()->A_MOVE_AMPLITUDE = 0;
 	Walking::GetInstance()->Start();
@@ -130,7 +130,7 @@ void Motion::FreeAllEngines()
 void Motion::SetHeadTilt(HeadTilt headTilt)
 {
 	Head::GetInstance()->MoveByAngle(headTilt.Pan, headTilt.Tilt);
-	WaitForActionFinish();
+	//WaitForActionFinish();
 }
 
 HeadTilt Motion::GetHeadTilt()
