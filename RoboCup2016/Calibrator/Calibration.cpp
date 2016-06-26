@@ -45,55 +45,81 @@ Calibration* Calibration::ReadFromFile()
 
 void Calibration::ParseLineFromCalibrationFile(string line)
 {
-	string key = line.substr(0, 12);
-	size_t keyStart = line.find('[');
-	size_t keyEnd = line.find(']');
-	int value = atoi(line.substr(keyStart + 1, keyEnd - keyStart).c_str());
+	size_t keyEnd = line.find(':');
+	string key = line.substr(0, keyEnd);
+
+	size_t valueStart = line.find('[');
+	size_t valueEnd = line.find(']');
+	string valueString = line.substr(valueStart + 1, valueEnd - valueStart - 1);
+	Scalar value = ParseScalar(valueString);
 
 	Calibration* calibration = Calibration::GetInstance();
 
-	if (key == "White: H_min") calibration->MinWhiteHSV[0] = value;
-	if (key == "White: S_min") calibration->MinWhiteHSV[1] = value;
-	if (key == "White: V_min") calibration->MinWhiteHSV[2] = value;
+	if (key == WHITE_MIN)
+		calibration->MinWhiteHSV = value;
+	if (key == WHITE_MAX)
+		calibration->MaxWhiteHSV = value;
+	if (key == GREEN_MIN)
+		calibration->MinGreenHSV = value;
+	if (key == GREEN_MAX)
+		calibration->MaxGreenHSV = value;
 
-	if (key == "White: H_max") calibration->MaxWhiteHSV[0] = value;
-	if (key == "White: S_max") calibration->MaxWhiteHSV[1] = value;
-	if (key == "White: V_max") calibration->MaxWhiteHSV[2] = value;
+	if (key == OUR_GOALKEEPER_MIN)
+		calibration->MinOurGKHSV = value;
+	if (key == OUR_GOALKEEPER_MAX)
+		calibration->MaxOurGKHSV = value;
+	if (key == OPPOSITE_GOALKEEPER_MIN)
+		calibration->MinOppGKHSV = value;
+	if (key == OPPOSITE_GOALKEEPER_MAX)
+		calibration->MaxOppGKHSV = value;
+}
 
-	if (key == "Green: H_min") calibration->MinGreenHSV[0] = value;
-	if (key == "Green: S_min") calibration->MinGreenHSV[1] = value;
-	if (key == "Green: V_min") calibration->MinGreenHSV[2] = value;
+Scalar Calibration::ParseScalar(string scalarString)
+{
+	vector <int> tokens;
+	string delimiter = ",";
 
-	if (key == "Green: H_max") calibration->MaxGreenHSV[0] = value;
-	if (key == "Green: S_max") calibration->MaxGreenHSV[1] = value;
-	if (key == "Green: V_max") calibration->MaxGreenHSV[2] = value;
+	string::size_type lastPos = 0;
+	string::size_type pos = scalarString.find(delimiter, lastPos);
+
+	while (string::npos != pos) {
+		tokens.push_back(atoi(scalarString.substr(lastPos, pos - lastPos).c_str()));
+		lastPos = pos + delimiter.size();
+		pos = scalarString.find(delimiter, lastPos);
+	}
+
+	tokens.push_back(atoi(scalarString.substr(lastPos, scalarString.size() - lastPos).c_str()));
+
+	Scalar result(tokens[0], tokens[1], tokens[2]);
+	return result;
 }
 
 void Calibration::WriteCalibrationToFile()
 {
 	ofstream out(CalibrationFilePath);
 
-	out << "White: H_min[" << MinWhiteHSV[0] << "]\n";
-	out << "White: S_min[" << MinWhiteHSV[1] << "]\n";
-	out << "White: V_min[" << MinWhiteHSV[2] << "]\n";
+	out << ScalarToString(WHITE_MIN, MinWhiteHSV);
+	out << ScalarToString(WHITE_MAX, MaxWhiteHSV);
+	out << endl;
 
-	out << "\n";
+	out << ScalarToString(GREEN_MIN, MinGreenHSV);
+	out << ScalarToString(GREEN_MAX, MaxGreenHSV);
+	out << endl;
 
-	out << "White: H_max[" << MaxWhiteHSV[0] << "]\n";
-	out << "White: S_max[" << MaxWhiteHSV[1] << "]\n";
-	out << "White: V_max[" << MaxWhiteHSV[2] << "]\n";
+	out << ScalarToString(OUR_GOALKEEPER_MIN, MinOurGKHSV);
+	out << ScalarToString(OUR_GOALKEEPER_MAX, MaxOurGKHSV);
+	out << endl;
 
-	out << "\n";
-
-	out << "Green: H_min[" << MinGreenHSV[0] << "]\n";
-	out << "Green: S_min[" << MinGreenHSV[1] << "]\n";
-	out << "Green: V_min[" << MinGreenHSV[2] << "]\n";
-
-	out << "\n";
-
-	out << "Green: H_max[" << MaxGreenHSV[0] << "]\n";
-	out << "Green: S_max[" << MaxGreenHSV[1] << "]\n";
-	out << "Green: V_max[" << MaxGreenHSV[2] << "]\n";
+	out << ScalarToString(OPPOSITE_GOALKEEPER_MIN, MinOppGKHSV);
+	out << ScalarToString(OPPOSITE_GOALKEEPER_MAX, MaxOppGKHSV);
+	out << endl;
 
 	out.close();
+}
+
+string Calibration::ScalarToString(string scalarName, Scalar scalar)
+{
+	char scalarStr[256];
+	sprintf(scalarStr, "%s:[%d,%d,%d]\n", scalarName.c_str(), (int)scalar[0], (int)scalar[1], (int)scalar[2]);
+	return string(scalarStr);
 }
