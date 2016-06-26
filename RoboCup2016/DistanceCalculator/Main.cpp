@@ -18,7 +18,7 @@ void DrawMiddleColumn(Mat &image);
 int main()
 {
 //	WaitForKey();
-//	BackupCurrentDatabase();
+	//BackupCurrentDatabase();
 
 	Calibration::ReadFromFile();
 	Calibration* calibration = Calibration::GetInstance();

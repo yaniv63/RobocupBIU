@@ -16,6 +16,16 @@ BallMovementCalculator::~BallMovementCalculator() {
 	// TODO Auto-generated destructor stub
 }
 
+void BallMovementCalculator::ResetSamples()
+{
+	TimedDetectedBall emptyBall;
+
+	for (int i = 0 ; i < NUM_OF_SAMPLES ; i++)
+	{
+		m_SamplesArray[i] = emptyBall;
+	}
+}
+
 BallMovement BallMovementCalculator::CalculateBallMovement(TimedDetectedBall timedDetectedBall)
 {
 	Mat image(480,640, CV_8UC3, Scalar(0,0,0));

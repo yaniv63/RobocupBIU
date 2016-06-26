@@ -2,7 +2,7 @@
 
 GateDetector::GateDetector()
 {
-
+	m_calibration = Calibration::GetInstance();
 }
 
 GateDetector::~GateDetector()
@@ -80,7 +80,10 @@ DetectedObject* GateDetector::DetectObject(Mat& inputImageHSV)
 
 	if (post1.size.area() > 0 && post2.size.area() > 0)
 	{
-		return new DetectedGoal(post1, post2);
+		RotatedRect leftPost = (post1.center.x < post2.center.x) ? post1 : post2;
+		RotatedRect rightPost = (post1.center.x > post2.center.x) ? post1 : post2;
+		bool isOurGoal = FindGKColor(inputImageHSV, leftPost, rightPost);
+		return new DetectedGoal(leftPost, rightPost, isOurGoal);
 	}
 
 	if (post1.size.area() == 0 && post2.size.area() == 0)
@@ -113,16 +116,46 @@ DetectedObject* GateDetector::DetectObject(Mat& inputImageHSV)
 	
 	if (rightCounter > leftCounter  &&  rightCounter - leftCounter > 5)
 	{
-		return new DetectedGoal(post1, POST_LEFT);
+		return new DetectedGoal(post1, POST_LEFT, false);
 	}
 	else if (rightCounter < leftCounter  &&  leftCounter - rightCounter > 5)
 	{
-		return new DetectedGoal(post1, POST_RIGHT);
+		return new DetectedGoal(post1, POST_RIGHT, false);
 	}
 	else
 	{
 		return new DetectedGoal();
 	}	
+}
+
+bool GateDetector::FindGKColor(Mat& image, RotatedRect leftPost, RotatedRect rightPost)
+{
+	float leftPostLongEdge = MAX(leftPost.size.height, leftPost.size.width);
+	float rightPostLongEdge = MAX(rightPost.size.height, rightPost.size.width);
+
+	int top = MIN(leftPost.center.y - leftPostLongEdge/2, rightPost.center.y - rightPostLongEdge/2);
+	int buttom = MAX(leftPost.center.y + leftPostLongEdge/2, rightPost.center.y + rightPostLongEdge/2);
+
+	int ourGKCount = 0;
+	int oppositeGKCount = 0;
+
+	for (int row = top ; row <= buttom ; row++)
+	{
+		for (int column = leftPost.center.x ; column <= rightPost.center.x ; column++)
+		{
+			Vec3b currentPixel = image.at<Vec3b>(column, row);
+			if (m_calibration->IsOurGKPixel(currentPixel))
+			{
+				ourGKCount++;
+			}
+			else if (m_calibration->IsOppGKPixel(currentPixel))
+			{
+				oppositeGKCount++;
+			}
+		}
+	}
+
+	return ourGKCount > oppositeGKCount;
 }
 
 int GateDetector::CountAndDrawWhitePixels(Mat& BWImage, Mat&outputImageToDraw, float top, float buttom, float left, float right)

@@ -45,6 +45,12 @@ public:
 	static Calibration* ReadFromFile();
 	void WriteCalibrationToFile();
 
+	bool IsWhitePixel(Vec3b pixel);
+	bool IsGreenPixel(Vec3b pixel);
+	bool IsOurGKPixel(Vec3b pixel);
+	bool IsOppGKPixel(Vec3b pixel);
+	bool IsInPixelRange(Vec3b pixel, Scalar minRange, Scalar maxRange);
+
 private:
 	static Calibration* m_instance;
 	Calibration();

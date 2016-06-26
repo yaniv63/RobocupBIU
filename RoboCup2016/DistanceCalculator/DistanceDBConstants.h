@@ -1,7 +1,7 @@
 #ifndef DistanceDBConstants_H_
 #define DistanceDBConstants_H_
 
-#define MinTilt -10
+#define MinTilt -15
 #define MaxTilt 10
 #define TiltDelta 5
 #define NUM_OF_BLOCKS 30

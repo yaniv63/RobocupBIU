@@ -123,3 +123,30 @@ string Calibration::ScalarToString(string scalarName, Scalar scalar)
 	sprintf(scalarStr, "%s:[%d,%d,%d]\n", scalarName.c_str(), (int)scalar[0], (int)scalar[1], (int)scalar[2]);
 	return string(scalarStr);
 }
+
+bool Calibration::IsWhitePixel(Vec3b pixel)
+{
+	return IsInPixelRange(pixel, MinWhiteHSV, MaxWhiteHSV);
+}
+
+bool Calibration::IsGreenPixel(Vec3b pixel)
+{
+	return IsInPixelRange(pixel, MinGreenHSV, MaxGreenHSV);
+}
+
+bool Calibration::IsOurGKPixel(Vec3b pixel)
+{
+	return IsInPixelRange(pixel, MinOurGKHSV, MaxOurGKHSV);
+}
+
+bool Calibration::IsOppGKPixel(Vec3b pixel)
+{
+	return IsInPixelRange(pixel, MinOppGKHSV, MaxOppGKHSV);
+}
+
+bool Calibration::IsInPixelRange(Vec3b pixel, Scalar minRange, Scalar maxRange)
+{
+	return 	minRange[0] <= pixel[0] <= maxRange[0] &&
+			minRange[1] <= pixel[1] <= maxRange[1] &&
+			minRange[2] <= pixel[2] <= maxRange[2];
+}

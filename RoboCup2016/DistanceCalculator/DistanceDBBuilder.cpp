@@ -64,9 +64,6 @@ map<int,int> DistanceDBBuilder::CreateDatabse(Mat whiteImage, int zeroPixelDista
 
 		if (nextPixel != currentPixel)
 		{
-			result[pixelsCount] = distance;
-			blockNumber++;
-
 			if (blockNumber < 20)
 			{
 				distance += 5;
@@ -75,6 +72,8 @@ map<int,int> DistanceDBBuilder::CreateDatabse(Mat whiteImage, int zeroPixelDista
 			{
 				distance +=10;
 			}
+			result[pixelsCount] = distance;
+			blockNumber++;
 		}
 
 		pixelsCount++;

@@ -24,6 +24,7 @@ public:
 	virtual ~BallMovementCalculator();
 
 	BallMovement CalculateBallMovement(TimedDetectedBall timedDetectedBall);
+	void ResetSamples();
 
 private:
 	void PushDetectedBallToQueue(TimedDetectedBall timedDetectedBall);
