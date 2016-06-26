@@ -13,7 +13,8 @@ public:
 	~BallDetector();
 
 	virtual DetectedObject* DetectObject(Mat& inputImage);
-
+	DetectedObject* geometricBallDetection(Mat& inputImageHSV);
+	DetectedObject* probabilisticBallDetection(Mat& inputImageHSV);
 	static inline DetectedObject* GetDefault() {return new DetectedBall();}
 
 private:

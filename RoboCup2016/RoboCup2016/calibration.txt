@@ -1,16 +1,15 @@
-White: H_min[0]
-White: S_min[0]
-White: V_min[59]
+White: H_min[14]
+White: S_min[5]
+White: V_min[91]
 
-White: H_max[80]
-White: S_max[147]
-White: V_max[255]
+White: H_max[165]
+White: S_max[42]
+White: V_max[179]
 
-Green: H_min[45]
-Green: S_min[93]
-Green: V_min[58]
+Green: H_min[34]
+Green: S_min[16]
+Green: V_min[46]
 
-Green: H_max[51]
-Green: S_max[141]
-Green: V_max[86]
-
+Green: H_max[66]
+Green: S_max[255]
+Green: V_max[154]

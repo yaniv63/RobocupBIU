@@ -107,6 +107,7 @@ void* BrainActionAsync(void*)
 					//printf( "Robot is walking!\n");
 					//keep walking
 				}*/
+				break;
 			}
 
 			case TurnLeft:

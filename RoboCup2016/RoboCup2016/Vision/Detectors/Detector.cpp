@@ -22,7 +22,8 @@ DetectedObject* Detector::Detect(Mat& inputImage, bool writeToMemory, bool draw)
 	cvtColor(inputImage, currentFrameHSV, CV_BGR2HSV);
 
 	// The detection works with HSV image, while the debug drawing works eith BGR image.
-	DetectedObject* detectedObject = DetectObject(currentFrameHSV);
+	DetectedObject* detectedObject = DetectObject(currentFrameHSV); //FIXME: enable this line before commit
+	//DetectedObject* detectedObject = DetectObject(inputImage);
 	if (draw)
 	{
 		detectedObject->Draw(inputImage);
