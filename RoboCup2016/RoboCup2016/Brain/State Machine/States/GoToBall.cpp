@@ -27,12 +27,22 @@ void GoToBall::Run()
 		m_Motion->GetUp();
 		m_stateVariable = "BallLost";
 	}
-	//Got to ball
-	if (m_Vision->Ball->Get()->Distance() == 0)
+
+	if (m_Vision->Ball->Get()->Distance() == -1)
 	{
-		m_stateVariable = "InKickDistance";
+		m_Motion->RunAction(ActionPage::BendToBall);
+		if (m_Vision->Ball->Get()->IsDetected)
+		{
+			m_Motion->StartWalking();
+			usleep(2000*1000);
+			m_Motion->StopWalking();
+			m_stateVariable = "InKickDistance";
+		}
+		else
+		{
+			m_stateVariable = "BallLost";
+		}
 	}
-	m_stateVariable = "InKickDistance";
 }
 
 void GoToBall::turnToBall(float angleToBall)

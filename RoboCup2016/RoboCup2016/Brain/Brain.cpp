@@ -69,7 +69,7 @@ void* BrainActionAsync(void*)
 			}
 			case Kick:
 			{
-				motion->RunAction(ActionPage::Kick);
+				motion->RunAction(ActionPage::RightKick);
 				break;
 			}
 			case Exit:

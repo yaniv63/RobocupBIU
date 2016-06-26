@@ -16,12 +16,12 @@ void Kick::Run()
 	if (m_isGoalFound)
 		turnToGoal(); //turn around the ball to face the goal
 	//kick
-	m_Motion->RunAction(ActionPage::Kick);
+	m_Motion->RunAction(ActionPage::RightKick);
 
 }
 
 void Kick::turnToGoal()
-{
+{/*
 	///// FACING ENEMY GOAL ////////
 	if((DegreeBetweenRobotAndGoal >= 0 && DegreeBetweenRobotAndGoal <= 90))
 	{
@@ -40,7 +40,7 @@ void Kick::turnToGoal()
 	else if((DegreeBetweenRobotAndGoal < -90 && DegreeBetweenRobotAndGoal >= -180))
 	{
 		//Left circle around the ball - Right turn of Degree
-	}
+	}*/
 
 }
 

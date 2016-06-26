@@ -26,14 +26,14 @@ void LookForBall::Run()
 		if (pan > PanMaxLeft)
 		{
 			pan = PanMaxRight;
-			tilt += 20;
+			tilt += 22.5;
 			if (tilt > -10)
 			{
 				m_stateVariable = "BallNotFound";
 				return;
 			}
 		}
-		pan += 15;
+		pan += 25;
 
 	}
 
@@ -54,7 +54,7 @@ void LookForBall::CenterBall()
 {
 	WriteLine("Centering ball");
 	usleep(3000*1000);
-	Point2f location = m_Vision->Ball->Get()->Location;
+	Point2f location = m_Vision->Ball->Get()->Location;BallMovement
 	float tilt = m_Motion->GetHeadTilt().Tilt;
 	float pan = m_Motion->GetHeadTilt().Pan;
 

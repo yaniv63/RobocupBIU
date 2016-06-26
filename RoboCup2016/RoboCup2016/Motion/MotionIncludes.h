@@ -25,7 +25,13 @@
 
 enum class ActionPage {
 	Init = 9,
-	Kick = 4
+	BendToBall = 5,
+	RightKick = 80,
+	LeftKick = 85,
+	BackGetup = 75,
+	FrontGetup = 70,
+	RightDive = 60,
+	LeftDive = 65
 };
 
 #endif
