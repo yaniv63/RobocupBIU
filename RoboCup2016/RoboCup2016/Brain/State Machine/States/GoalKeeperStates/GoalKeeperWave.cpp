@@ -8,8 +8,7 @@
 #include "GoalKeeperWave.h"
 
 GoalKeeperWave::GoalKeeperWave() {
-	// TODO Auto-generated constructor stub
-
+	m_GKStateName = GKState_Wave;
 }
 
 GoalKeeperWave::~GoalKeeperWave() {
@@ -17,6 +16,7 @@ GoalKeeperWave::~GoalKeeperWave() {
 }
 
 void GoalKeeperWave::Run(){
-	cout <<"inside GoalKeeperWave "<<endl;
-
+	cout <<"inside GoalKeeperWave Run"<<endl;
+	//Action::GetInstance()->Start(Page_Wave);
+	//m_Motion->WaitForActionFinish();
 }

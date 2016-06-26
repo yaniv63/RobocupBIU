@@ -14,7 +14,7 @@ GoalKeeperState::GoalKeeperState() {
 }
 
 GoalKeeperState::~GoalKeeperState() {
-	delete Logger;
+	//delete Logger;
 }
 
 string GoalKeeperState::NameToString()

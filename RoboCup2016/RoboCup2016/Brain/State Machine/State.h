@@ -23,7 +23,10 @@ enum StatePageNum
 	Page_ChangeSpot,
 	Page_Kick = 4,
 	Page_LookForBall,
-	Page_LookForGoal
+	Page_LookForGoal,
+	Page_JumpToTheRight,
+	Page_JumpToTheLeft,
+	Page_Wave
 };
 
 enum LookDirection

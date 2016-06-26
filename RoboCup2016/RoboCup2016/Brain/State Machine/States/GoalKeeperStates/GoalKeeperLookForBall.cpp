@@ -17,15 +17,16 @@ GoalKeeperLookForBall::~GoalKeeperLookForBall() {
 }
 
 void GoalKeeperLookForBall::Run(){
-	cout <<"inside GoalKeeperLookForBall "<<endl;
+	cout <<"inside GoalKeeperLookForBall Run"<<endl;
 	float pan;
 	float tilt;
 
-	tilt = -15;
+	tilt = -30;
 	pan = 0;
 	usleep(3000*1000);
 	while (!m_Vision->Ball->Get()->IsDetected && MotionStatus::FALLEN == STANDUP)
 	{
+		cout<< "GoalKeeperLookForBall Run: inside while"<<endl;
 		m_Motion->SetHeadTilt(HeadTilt(tilt, pan));
 		usleep(400*4*1000);
 		if (pan > PanMaxLeft){
@@ -39,8 +40,8 @@ void GoalKeeperLookForBall::Run(){
 		m_GKStateVariable == "FellDown";
 	}
 	else{
-		//Ball detected succesfully
-		//WriteLine("Ball found");
+		//Ball detected successfully
+		WriteLine("Ball found");
 		//LookForBall::CenterBall();
 		m_GKStateVariable = "BallFound";
 	}

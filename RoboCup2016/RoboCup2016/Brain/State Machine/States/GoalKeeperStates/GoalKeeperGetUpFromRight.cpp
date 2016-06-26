@@ -8,8 +8,7 @@
 #include "GoalKeeperGetUpFromRight.h"
 
 GoalKeeperGetUpFromRight::GoalKeeperGetUpFromRight() {
-	// TODO Auto-generated constructor stub
-
+	m_GKStateName = GKState_GetUpFromRight;
 }
 
 GoalKeeperGetUpFromRight::~GoalKeeperGetUpFromRight() {
@@ -18,4 +17,6 @@ GoalKeeperGetUpFromRight::~GoalKeeperGetUpFromRight() {
 
 void GoalKeeperGetUpFromRight::Run(){
 	cout <<"in GoalKeeperGetUpFromRight "<<endl;
+	//Motion::GetInstance()->GetUp();
+	//add turn to the left
 }

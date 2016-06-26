@@ -8,8 +8,7 @@
 #include "GoalKeeperJumpRight.h"
 
 GoalKeeperJumpRight::GoalKeeperJumpRight() {
-	// TODO Auto-generated constructor stub
-
+	m_GKStateName = GKState_JumpRight;
 }
 
 GoalKeeperJumpRight::~GoalKeeperJumpRight() {
@@ -17,6 +16,7 @@ GoalKeeperJumpRight::~GoalKeeperJumpRight() {
 }
 
 void GoalKeeperJumpRight::Run(){
-	cout <<"in GoalKeeperJumpRight "<<endl;
-
+	cout <<"in GoalKeeperJumpRight Run"<<endl;
+	//Action::GetInstance()->Start(Page_JumpToTheRight);
+	//m_Motion->WaitForActionFinish();
 }

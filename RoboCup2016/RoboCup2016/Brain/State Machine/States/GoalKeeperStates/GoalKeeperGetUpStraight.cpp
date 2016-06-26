@@ -8,8 +8,7 @@
 #include "GoalKeeperGetUpStraight.h"
 
 GoalKeeperGetUpStraight::GoalKeeperGetUpStraight() {
-	// TODO Auto-generated constructor stub
-
+	m_GKStateName = GKState_GetUpStraight;
 }
 
 GoalKeeperGetUpStraight::~GoalKeeperGetUpStraight() {
@@ -18,4 +17,6 @@ GoalKeeperGetUpStraight::~GoalKeeperGetUpStraight() {
 
 void GoalKeeperGetUpStraight::Run(){
 	cout <<"in GoalKeeperGetUpStraight "<<endl;
+	//Action::GetInstance()->Start(Page_Init);
+	//m_Motion->WaitForActionFinish();
 }

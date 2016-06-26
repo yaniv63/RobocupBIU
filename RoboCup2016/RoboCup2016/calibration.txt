@@ -13,4 +13,3 @@ Green: V_min[58]
 Green: H_max[60]
 Green: S_max[255]
 Green: V_max[187]
-

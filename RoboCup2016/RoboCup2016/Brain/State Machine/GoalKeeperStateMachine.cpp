@@ -22,7 +22,8 @@ void GoalKeeperStateMachine::Run()
 	while (m_GKCurrentState != NULL)
 	{
 		if (MotionStatus::FALLEN != STANDUP){
-			Motion::GetInstance()->GetUp();
+			cout <<"in FALLEN != STANDUP state. suppose to get up. Init GoalKeeper"<<endl;
+			//Motion::GetInstance()->GetUp();
 			m_GKCurrentState = new GoalKeeperInit(); //TODO - check
 		}
 
@@ -38,7 +39,6 @@ void GoalKeeperStateMachine::Run()
 			cout<<"new state name "<<m_GKNextState->Name()<<endl;
 			break;
 		}
-
 		case GKState_LooKForBall:{
 			cout<< "in LooKForBall case"<<endl;
 			if (stateVariable == "BallFound")
@@ -103,11 +103,11 @@ void GoalKeeperStateMachine::Run()
 			m_GKNextState = new GoalKeeperLookForBall();
 		}
 		cout<<"current state "<<m_GKCurrentState->Name()<<endl;
-/*		if (m_GKCurrentState!=NULL){
+		/*if (m_GKCurrentState!=NULL){
 			cout<< "inside m_GKCurrentState!=NULL"<<endl;
 			delete m_GKCurrentState;
-		}*/
+			cout<< "after deletion state name "<<m_GKCurrentState->Name()<<endl;
+		} 41 246 14*/
 		m_GKCurrentState = m_GKNextState;
-		cout<< "after deletion state name"<<m_GKCurrentState->Name();
 	}
 }
