@@ -1,4 +1,4 @@
-#define TEAM_NUMBER 	2
+#define TEAM_NUMBER 	12
 #define PLAYER_NUMBER 	1
 #define TEAM_COLOUR 	0
 #define GOALKEEPER 		true
