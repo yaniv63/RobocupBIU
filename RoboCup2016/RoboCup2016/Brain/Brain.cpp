@@ -1,5 +1,7 @@
 #include "Brain.h"
 #include "MenuOption.h"
+#include "../Common/PlayerInfo.h"
+#include "BrainData.h"
 
 // Declartion of the thread method.
 void* BrainActionAsync(void*);
@@ -57,9 +59,21 @@ void* BrainActionAsync(void*)
 			{
 				motion->StartEngines();
 				Log::GetInstance()->Info("Starting to play", "Brain");
-				StateMachine fsm;
-				fsm.Run();
+				PlayerInfo info;
+				StateMachine* fsm;
+				cout << "before select statemachine type"<<endl;
+				if (info.isGoalkeeper == GOALKEEPER){
+					cout << "entered to goalkeeper statem machine"<<endl;
+					fsm = new GoalKeeperStateMachine();
+				}
+				else {
+					fsm = new StateMachine();
+				}
+				fsm->Run();
 				terminate = true;
+				if(fsm != NULL){
+				delete fsm;
+				}
 				break;
 			}
 			case Stand:
@@ -69,7 +83,7 @@ void* BrainActionAsync(void*)
 			}
 			case Kick:
 			{
-				motion->RunAction(ActionPage::Kick);
+				motion->RunAction(ActionPage::RightKick);
 				break;
 			}
 			case Exit:
@@ -95,7 +109,6 @@ void* BrainActionAsync(void*)
 			}
 
 			//TODO: Finish options
-
 			case Walk:
 			{
 				motion->StartWalking(0,5,0);
@@ -103,14 +116,13 @@ void* BrainActionAsync(void*)
 				motion->StopWalking();
 				//motion->StartWalking(5,0,0);
 
-
-
-
 				/*while (MotionStatus::FALLEN == STANDUP)
 				{
 					//printf( "Robot is walking!\n");
 					//keep walking
+
 				}*/
+				break;
 			}
 
 			case TurnLeft:
@@ -142,6 +154,7 @@ void* BrainActionAsync(void*)
 					usleep(250*1000);
 					Walking::GetInstance()->X_MOVE_AMPLITUDE = i;
 				}
+				break;
 			}
 
 			case Reset:

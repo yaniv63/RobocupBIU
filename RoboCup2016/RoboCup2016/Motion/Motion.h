@@ -1,7 +1,8 @@
 #include "MotionIncludes.h"
 
 
-#define MOTION_FILE_PATH    "/home/robot/HROS5-Framework/Data/motion_4096.bin"
+//#define MOTION_FILE_PATH    "/home/robot/HROS5-Framework/Data/motion_4096.bin"
+#define MOTION_FILE_PATH    "/home/robot/HROS5-Framework/Data/soccer_4096.bin"
 #define INI_FILE_PATH    	"/home/robot/HROS5-Framework/Data/config.ini"
 
 #pragma once
@@ -33,6 +34,7 @@ public:
 	void WalkStraight(int cmToWalk);
 	void StartWalking();
 	void StartWalking(int x_amp, int y_amp, int a_amp);
+	void StartWalking(double distance);
 	void StopWalking();
 	void GetUp();
 	

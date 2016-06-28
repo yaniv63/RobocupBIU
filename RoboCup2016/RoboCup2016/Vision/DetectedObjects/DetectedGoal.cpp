@@ -1,15 +1,13 @@
 #include "DetectedGoal.h"
 
-DetectedGoal::DetectedGoal(RotatedRect post1, RotatedRect post2)
-	:DetectedObject(GetGoalCenter(post1, post2), true)
+DetectedGoal::DetectedGoal(RotatedRect leftPost, RotatedRect rightPost, bool isOurGoal)
+	:DetectedObject(GetGoalCenter(leftPost, rightPost), true)
+	, LeftPost(leftPost), RightPost(rightPost), DetectedPost(POST_BOTH), IsOurGoal(isOurGoal)
 {
-	DetectedPost = POST_BOTH;
-	LeftPost = (post1.center.x < post2.center.x) ? post1 : post2;
-	RightPost = (post1.center.x > post2.center.x) ? post1 : post2;
 }
 
-DetectedGoal::DetectedGoal(RotatedRect post, Post detectedPost)
-	:DetectedObject(post.center, true)
+DetectedGoal::DetectedGoal(RotatedRect post, Post detectedPost, bool isOurGoal)
+	:DetectedObject(post.center, true), IsOurGoal(isOurGoal)
 {
 	DetectedPost = detectedPost;
 
@@ -27,6 +25,7 @@ DetectedGoal::DetectedGoal()
 	:DetectedObject(UnknownLocation, false)
 {
 	DetectedPost = POST_NONE;
+	IsOurGoal = false;
 }
 
 DetectedGoal::~DetectedGoal()
@@ -67,7 +66,7 @@ void DetectedGoal::PrintDetailsOnImage(Mat image)
 	char message[256];
 	PrintMessageOnImage(image, "Goal details:", Point(0,30));
 
-	sprintf(message, "IsDetected: %s", (IsDetected ? "true" : "false"));
+	sprintf(message, "IsDetected: %s, IsOur: %s", (IsDetected ? "true" : "false"), (IsOurGoal ? "true" : "false"));
 	PrintMessageOnImage(image, message, Point(0,50));
 
 	sprintf(message, "Location: (%.3f, %.3f)", Location.x, Location.y);

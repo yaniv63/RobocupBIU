@@ -1,4 +1,5 @@
 #include "LookForBall.h"
+#include "../../BrainData.h"
 
 LookForBall::LookForBall()
 {
@@ -17,7 +18,7 @@ void LookForBall::Run()
 
 	tilt = TiltMin;
 	pan = PanMaxRight;
-	usleep(3000*1000);
+	//usleep(3000*1000);
 	while (!m_Vision->Ball->Get()->IsDetected && MotionStatus::FALLEN == STANDUP)
 	{
 		m_Motion->SetHeadTilt(HeadTilt(tilt, pan));
@@ -26,14 +27,14 @@ void LookForBall::Run()
 		if (pan > PanMaxLeft)
 		{
 			pan = PanMaxRight;
-			tilt += 20;
+			tilt += 22.5;
 			if (tilt > -10)
 			{
 				m_stateVariable = "BallNotFound";
 				return;
 			}
 		}
-		pan += 15;
+		pan += 25;
 
 	}
 

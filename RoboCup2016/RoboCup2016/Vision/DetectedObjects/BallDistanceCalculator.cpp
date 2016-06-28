@@ -25,16 +25,16 @@ BallDistanceCalculator::~BallDistanceCalculator()
 	// TODO Auto-generated destructor stub
 }
 
-int BallDistanceCalculator::CalculateDistance(Point2f ballLocation, int headTilt)
+int BallDistanceCalculator::CalculateDistance(Point2f ballLocation, float radius, int headTilt)
 {
 	int tiltKey = FindClosestTiltInMap(headTilt);
-	return m_tiltToDatabase[tiltKey]->GetValueFromKey((int)ballLocation.y);
+	return m_tiltToDatabase[tiltKey]->GetValueFromKey(FRAME_HEIGHT - ((int)ballLocation.y + radius));
 }
 
 bool isNumber(const string& s)
 {
 	string::const_iterator it = s.begin();
-	while (it != s.end() && isdigit(*it)) ++it;
+	while (it != s.end() && (isdigit(*it) || *it == '-')) ++it;
 	return !s.empty() && it == s.end();
 }
 

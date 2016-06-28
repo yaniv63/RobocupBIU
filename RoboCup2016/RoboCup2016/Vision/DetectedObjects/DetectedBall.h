@@ -16,10 +16,9 @@ public:
 	virtual float Distance();
 	virtual void Draw(Mat& image);
 
-private:
+protected:
 	float m_Distance;
-
-	void PrintDetailsOnImage(Mat image);
+	virtual void PrintDetailsOnImage(Mat image);
 };
 
 #endif /* DETECTEDBALL_H_ */

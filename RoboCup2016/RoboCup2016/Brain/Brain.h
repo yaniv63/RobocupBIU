@@ -1,5 +1,8 @@
 #include "../Log/Log.h"
 #include "State Machine/StateMachine.h"
+#include "State Machine/GoalKeeperStateMachine.h"
+#include "Goalkeeper/BallMovementCalculator.h"
+
 
 #pragma once
 

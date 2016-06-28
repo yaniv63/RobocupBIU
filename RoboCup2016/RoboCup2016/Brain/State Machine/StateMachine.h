@@ -13,9 +13,10 @@ public:
 
 	void SetCurrent(State* state);
 
-	void Run();
+	virtual void Run();
 
-private:
+
+protected:
 	State* m_currentState;
 	State* m_nextState;
 

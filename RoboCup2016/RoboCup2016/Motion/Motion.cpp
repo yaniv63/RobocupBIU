@@ -1,5 +1,6 @@
 #include "Motion.h"
 #include "MotionIncludes.h"
+#include "../Brain/BrainData.h"
 
 Motion* Motion::m_instance = NULL;
 Motion* Motion::GetInstance()
@@ -99,6 +100,14 @@ void Motion::StartWalking(int x_amp, int y_amp, int a_amp)
 	Walking::GetInstance()->Start();
 }
 
+void Motion::StartWalking(double distance)
+{
+	double timeToWalk = distance / BrainData::GetInstance()->WALK_SPEED;
+	StartWalking();
+	usleep(timeToWalk*1000000); //convert sec to microsec
+	StopWalking();
+}
+
 void Motion::StopWalking()
 {
 	Walking::GetInstance()->Stop();
@@ -112,14 +121,15 @@ void Motion::GetUp()
 	Action::GetInstance()->m_Joint.SetEnableBody(true, true);
 
 	if (MotionStatus::FALLEN == FORWARD)
-		//Action::GetInstance()->Start(1);   // FORWARD GETUP 10
-		printf( "Robot has fallen forward.\n");
+	{
+		RunAction(ActionPage::FrontGetup);// FORWARD GETUP 70
+		//printf( "Robot has fallen forward.\n");
+	}
 	else if (MotionStatus::FALLEN == BACKWARD)
-		//Action::GetInstance()->Start(1);   // BACKWARD GETUP 11
-		printf( "Robot has fallen backward.\n");
-	while (Action::GetInstance()->IsRunning() == 1) usleep(8000);
-	// Go back to Walk Ready
-	//mWalkReady(arbotixpro);
+	{
+		RunAction(ActionPage::BackGetup);// BACKWARD GETUP 75
+		//printf( "Robot has fallen backward.\n");
+	}
 }
 
 void Motion::FreeAllEngines()

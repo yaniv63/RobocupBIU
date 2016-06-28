@@ -6,9 +6,19 @@
 
 #define ImageWindow "Image"
 #define CalibrationWindow "Calibration"
-#define TrackbarGreenOrWhite "Green or White"
+#define TrackbarName "Calibration type"
 
 void onMouse(int event, int x, int y, int flag, void* param);
+
+enum
+{
+	White_Calibration,
+	Green_Calibration,
+	Opposite_GK_Calibration,
+	Our_GK_Calibration
+};
+
+static const char* CalibrationTypeStrings[] = { "White", "Green", "Opposite GK", "Our GK" };
 
 class Calibrator
 {
@@ -19,7 +29,9 @@ public:
 	void Calibrate();
 	void CalibrateGreen(Mat image, Point2i position);
 	void CalibrateWhite(Mat image, Point2i position);
-	bool IsGreenCalibration();
+	void CalibrateOurGK(Mat image, Point2i position);
+	void CalibrateOppGK(Mat image, Point2i position);
+
 	void ResetValuesToClick(Mat image, Point2i position);
 
 	void ReadCalibrationFromFile();

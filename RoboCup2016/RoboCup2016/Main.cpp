@@ -14,7 +14,6 @@ int main(int argc, char* argv[])
 	Vision::GetInstance()->Run();
 	Communication::GetInstance();
 
-
 	char key;
 	cout << "Do you want to free all the engines? [y/n]" << endl;
 	cin >> key;
@@ -24,7 +23,6 @@ int main(int argc, char* argv[])
 	}
 
 	cout << "Program finished" << endl;
-
 	return 0;
 }
 

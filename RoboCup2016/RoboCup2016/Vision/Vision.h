@@ -2,6 +2,8 @@
 #include "Detectors/GateDetector.h"
 #include "Detectors/LineDetector.h"
 #include "../Log/Log.h"
+#include "../Brain/Goalkeeper/BallMovementCalculator.h"
+#include "../Common/SharedMemory.h"
 
 #pragma once
 
@@ -21,6 +23,11 @@ public:
 	Detector* Gate;
 	Detector* Ball;
 	Detector* Line;
+	SharedMemory<BallMovement> BallMovementCalc;
+
+	BallMovementCalculator m_ballMovementCalculator;
+
+	bool IsOppositeGKInFrame();
 
 	bool IsVisionThreadRunning;
 
@@ -28,6 +35,9 @@ public:
 
 	void StartBallDetection();
 	void StopBallDetection();
+
+	void StartBallMovementCalc();
+	void StopBallMovementCalc();
 
 	void StartGoalDetection();
 	void StopGoalDetection();
@@ -46,9 +56,10 @@ private:
 	VideoWriter m_OutputVideo;
 
 	// Whether to run ball\Goal\Line detection during the Vision run.
-	bool m_RunBallDetection;
-	bool m_RunGoalDetection;
-	bool m_RunLineDetection;
+	SharedMemory<bool> m_RunBallDetection;
+	SharedMemory<bool> m_RunBallMovementCalc;
+	SharedMemory<bool> m_RunGoalDetection;
+	SharedMemory<bool> m_RunLineDetection;
 
 	static Vision* m_instance;
 	Vision();

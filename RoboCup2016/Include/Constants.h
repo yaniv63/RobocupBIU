@@ -20,8 +20,8 @@
 * Comments: None
 * Updated: 23.01.15
 *****************************************************************************************/
-#define FRAME_WIDTH 1280
-#define FRAME_HEIGHT 720
+#define FRAME_WIDTH 640
+#define FRAME_HEIGHT 480
 
 /*****************************************************************************************
 * Owners: All - opencv print to screen Fonts
@@ -50,7 +50,6 @@
 #define ROBOHEIGHT 59//24
 #define U0 FRAME_WIDTH/2
 #define V0 FRAME_HEIGHT/2
-
 
 //#define AXISTRANSPOSE     //define this for upside-down camera
 

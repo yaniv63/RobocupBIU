@@ -12,7 +12,7 @@
 #include "message_enum.h"
 #include "RoboCupGameControlData.h"
 #include "UdpSender.h"
-#include "PlayerInfo.h"
+#include "../Common/PlayerInfo.h"
 #include <thread>
 #include "UdpUtils.h"
 #include "../Common/SharedMemory.h"

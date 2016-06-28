@@ -18,6 +18,7 @@ public:
 	RotatedRect LeftPost;
 	RotatedRect RightPost;
 	Post DetectedPost;
+	bool IsOurGoal;
 
 	virtual float Distance();
 	virtual void Draw(Mat& image);
@@ -25,8 +26,8 @@ public:
 	DetectedGoal();
 	~DetectedGoal();
 
-	DetectedGoal(RotatedRect post1, RotatedRect post2);
-	DetectedGoal(RotatedRect post, Post detectedPost);
+	DetectedGoal(RotatedRect leftPost, RotatedRect rightPost, bool isOurGoal);
+	DetectedGoal(RotatedRect post, Post detectedPost, bool isOurGoal);
 
 private:
 	Point2f GetGoalCenter(RotatedRect post1, RotatedRect post2);

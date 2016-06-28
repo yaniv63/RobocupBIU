@@ -26,7 +26,8 @@ Vision::Vision()
 	m_SaveVideo = false;
 	m_RunBallDetection = true;
 	m_RunGoalDetection = true;
-	m_RunLineDetection = true;
+	m_RunLineDetection = false;
+	m_RunBallMovementCalc = false;
 
 	// Video settings
 	if (m_SaveVideo)
@@ -79,13 +80,7 @@ void Vision::Run()
 				Mat currentFrame;
 				m_VideoCapture >> currentFrame;
 
-				//timeval timev;
-				//gettimeofday(&timev, 0);
-				//cout << "Before: " << timev.tv_usec << endl;
 				Vision::GetInstance()->ProcessCurrentFrame(currentFrame);
-				//gettimeofday(&timev, 0);
-				//cout << "After: " << timev.tv_usec << endl;
-
 				imshow("Output", currentFrame);
 				key = waitKey(1);
 
@@ -106,19 +101,28 @@ void Vision::Run()
 		m_log->Error(ex.what(), m_logCategory);
 		cout << ex.what() << endl;
 	}
+
+	destroyAllWindows();
 }
 
 void Vision::ProcessCurrentFrame(Mat& currentFrame)
  {
-	if (m_RunGoalDetection) {
+	if (m_RunGoalDetection.SafeRead()) {
 		Gate->Detect(currentFrame);
 	}
 
-	if (m_RunBallDetection) {
+	if (m_RunBallDetection.SafeRead()) {
 		Ball->Detect(currentFrame);
+
+		if (m_RunBallMovementCalc.SafeRead())
+		{
+			TimedDetectedBall timedDetectedBall(*(DetectedBall*)Ball->Get());
+			BallMovement ballMovement = m_ballMovementCalculator.CalculateBallMovement(timedDetectedBall);
+			BallMovementCalc.SafeWrite(ballMovement);
+		}
 	}
 
-	if (m_RunLineDetection) {
+	if (m_RunLineDetection.SafeRead()) {
 		Line->Detect(currentFrame);
 	}
 }
@@ -130,27 +134,37 @@ void Vision::TerminateThread()
 
 void Vision::StartBallDetection()
 {
-	m_RunBallDetection = true;
+	m_RunBallDetection.SafeWrite(true);
 }
 void Vision::StopBallDetection()
 {
-	m_RunBallDetection = false;
+	m_RunBallDetection.SafeWrite(false);
+	m_ballMovementCalculator.ResetSamples();
+}
+
+void Vision::StartBallMovementCalc()
+{
+	m_RunBallMovementCalc.SafeWrite(true);
+}
+void Vision::StopBallMovementCalc()
+{
+	m_RunBallMovementCalc = false;
 }
 
 void Vision::StartGoalDetection()
 {
-	m_RunGoalDetection = true;
+	m_RunGoalDetection.SafeWrite(true);
 }
 void Vision::StopGoalDetection()
 {
-	m_RunGoalDetection = false;
+	m_RunGoalDetection.SafeWrite(false);
 }
 
 void Vision::StartLineDetection()
 {
-	m_RunLineDetection = true;
+	m_RunLineDetection.SafeWrite(true);
 }
 void Vision::StopLineDetection()
 {
-	m_RunLineDetection = false;
+	m_RunLineDetection.SafeWrite(false);
 }

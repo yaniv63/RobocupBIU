@@ -7,9 +7,9 @@
 
 #include "../DetectedObjects/DetectedObject.h"
 
-Point2f DetectedObject::UnknownLocation = Point2f(-1,-1);
+Point2d DetectedObject::UnknownLocation = Point2d(-1,-1);
 
-DetectedObject::DetectedObject(Point2f location, bool isFound)
+DetectedObject::DetectedObject(Point2d location, bool isFound)
 	:Location(location), IsDetected(isFound)
 {
 }

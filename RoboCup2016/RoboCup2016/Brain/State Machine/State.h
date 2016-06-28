@@ -17,7 +17,6 @@ enum StateName
 };
 
 
-
 enum StatePageNum
 {
 	Page_Init,
@@ -25,7 +24,10 @@ enum StatePageNum
 	Page_ChangeSpot,
 	Page_Kick = 4,
 	Page_LookForBall,
-	Page_LookForGoal
+	Page_LookForGoal,
+	Page_JumpToTheRight,
+	Page_JumpToTheLeft,
+	Page_Wave
 };
 
 enum LookDirection
@@ -48,9 +50,9 @@ public:
 
 	virtual void Run() = 0;
 
-	string NameToString();
+	virtual string NameToString();
 
-	virtual StateName Name();
+	StateName Name();
 
 	virtual string GetStateVariable();
 
