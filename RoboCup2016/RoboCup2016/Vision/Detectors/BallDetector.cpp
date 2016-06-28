@@ -142,14 +142,40 @@ DetectedObject* BallDetector::DetectObject(Mat& inputImageHSV)
 
 DetectedObject* BallDetector::probabilisticBallDetection(Mat& inputImageHSV)
 {
+	int minRad, maxRad, p1, p2,dp, minDist;
+	dp = 6;
+	minDist = 120;
+	minRad = 10;
+	maxRad = 100;
+	p1 = 100;
+	p2 = 200;
+	bool isCurrectDetection = false;
+	//double
+//	cv::namedWindow("Control", CV_WINDOW_AUTOSIZE);
+//			createTrackbar("minrad", "Control", &minRad, 500);
+//			createTrackbar("maxrad", "Control", &maxRad, 500);
+//			createTrackbar("p1", "Control", &p1, 500);
+//			createTrackbar("p2", "Control", &p2, 500);
+//			createTrackbar("dp", "Control", &dp, 500);
+//			createTrackbar("minDist", "Control", &minDist, 1000);
+
 	Mat onlyWhiteImage, field;
 	GetWhiteImage(inputImageHSV, onlyWhiteImage);
 	FindField(inputImageHSV, field);
 	imshow("BallDetector: field", field);
-    imshow("BallDetector: onlyWhiteImage", onlyWhiteImage);
-    //waitKey(10);
+//    imshow("BallDetector: onlyWhiteImage", onlyWhiteImage);
+	Mat onlyGreenImage;
+	inRange(inputImageHSV, Calibration::GetInstance()->MinGreenHSV, Calibration::GetInstance()->MaxGreenHSV, onlyGreenImage);
+	Mat nonGreenImage;
+	bitwise_not(onlyGreenImage, nonGreenImage);
+	Mat holesInField;
+	bitwise_and(nonGreenImage, field, holesInField);
+	// Smooth image with blur and closing
+	medianBlur(holesInField, holesInField, 15);
+	CloseImage(holesInField, holesInField);// end of holes
+	imshow("holesInField: probabilistic algorithm", holesInField);
 	Mat houghCircleInput, houghCircleInputGray, greenMatrixImage, originalBGRImage;
-	vector<Vec3f> circles, circlesInField;
+	vector<Vec3f> circles, circlesInField, circlesInFieldAndBlockHole;
 	cvtColor(inputImageHSV, greenMatrixImage, CV_HSV2BGR);
 	cvtColor(greenMatrixImage, houghCircleInputGray, CV_BGR2GRAY);
 	vector<Mat> splittedMat;
@@ -179,9 +205,10 @@ DetectedObject* BallDetector::probabilisticBallDetection(Mat& inputImageHSV)
 	{
 		//cout << houghCircleInputGray.rows/4 << endl;
 		GaussianBlur( houghCircleInputGray, houghCircleInputGray, Size(7, 7), 0.75, 0.75 );
-
+		//medianBlur(houghCircleInputGray, houghCircleInputGray, 15);
 		//blur(houghCircleInputGray, houghCircleInputGray, Size(3,3));
-		HoughCircles(houghCircleInputGray, circles, CV_HOUGH_GRADIENT,6, houghCircleInputGray.rows/4, 200, 100, 10, 100);
+		HoughCircles(houghCircleInputGray, circles, CV_HOUGH_GRADIENT,6, houghCircleInputGray.rows/4, 200, 100, 10, 100); //TODO: use this line
+		  //HoughCircles(houghCircleInputGray, circles, CV_HOUGH_GRADIENT, dp, minDist, p1, p2, minRad, maxRad);
 		//HoughCircles(houghCircleInputGray, circles, CV_HOUGH_GRADIENT,6, houghCircleInputGray.rows/4, 100, 200, 10, 100);
 	}
 	catch (Exception& ex)
@@ -223,6 +250,85 @@ DetectedObject* BallDetector::probabilisticBallDetection(Mat& inputImageHSV)
     }
     if(circlesInField.size() == 0)
     	return new DetectedBall;
+
+    //Start of new code
+    for( size_t i = 0; i < circlesInField.size(); i++ )
+    {
+    	 Point2f center(circlesInField[i][0], circlesInField[i][1]);
+         int radius = cvRound(circlesInField[i][2]);
+         int holeTrhshold = (int)(radius*4)*255*0.9;
+
+         // draw the circle center
+         //circle(greenMatrixImage, center, (float)radius, Colors::Blue, 2);
+         //if(radius < finalRadius)
+         //{
+        //	 finalRadius = radius;
+        //	 finalCenter= new Point(center);
+         //}
+         circle( greenMatrixImage, center, 3, Scalar(0,255,0), -1, 8, 0 );
+         circle( greenMatrixImage, center, radius, Scalar(0,0,255), 3, 8, 0 );
+         //cout<<"radius ["<<i<<"] = "<<radius<<endl;
+         int xPlusDiameter = 0;
+         int xMinusDiameter = 0;
+         int yPlusDiameter = 0;
+         int yMinusDiameter = 0;
+
+         int xPlusDiameterInHoles = 0;
+         int xMinusDiameterInHoles = 0;
+         int yPlusDiameterInHoles = 0;
+         int yMinusDiameterInHoles = 0;
+         //waitKey(0);
+         for(int j = 0; j < radius; j++)
+         {
+
+        	 //xPlusDiameter += onlyWhiteImage.at<uchar>(center.x + j, center.y);
+        	 //xMinusDiameter += onlyWhiteImage.at<uchar>(center.x - j, center.y);
+        	 //yPlusDiameter += onlyWhiteImage.at<uchar>(center.x, center.y + j);
+        	 //yMinusDiameter += onlyWhiteImage.at<uchar>(center.x, center.y -j);
+        	 currentIntensity = onlyWhiteImage.at<uchar>(center.y, center.x + j);
+        	 xPlusDiameter += currentIntensity.val[0];
+        	 currentIntensity = onlyWhiteImage.at<uchar>(center.y, center.x - j);
+        	 xMinusDiameter += currentIntensity.val[0];
+        	 currentIntensity = onlyWhiteImage.at<uchar>(center.y + j, center.x);
+        	 yPlusDiameter += currentIntensity.val[0];
+        	 currentIntensity = onlyWhiteImage.at<uchar>(center.y -j, center.x);
+        	 yMinusDiameter += currentIntensity.val[0];
+
+        	 currentIntensity = holesInField.at<uchar>(center.y, center.x + j);
+        	 xPlusDiameterInHoles += currentIntensity.val[0];
+        	 currentIntensity = holesInField.at<uchar>(center.y, center.x - j);
+        	 xMinusDiameterInHoles += currentIntensity.val[0];
+        	 currentIntensity = holesInField.at<uchar>(center.y + j, center.x);
+        	 yPlusDiameterInHoles += currentIntensity.val[0];
+        	 currentIntensity = holesInField.at<uchar>(center.y -j, center.x);
+        	 yMinusDiameterInHoles += currentIntensity.val[0];
+
+         }
+         //diametersArray[i] = xPlusDiameter + xMinusDiameter + yPlusDiameter +yMinusDiameter;
+         // draw the circle outline
+         int currentDiameter = xPlusDiameter + xMinusDiameter + yPlusDiameter +yMinusDiameter;
+         int currentDiameterInHoles = xPlusDiameterInHoles + xMinusDiameterInHoles + yPlusDiameterInHoles +yMinusDiameterInHoles;
+         if(currentDiameter > maxDiameters)
+         {
+        	 maxDiameters = currentDiameter;
+        	 chosenCenterLocationInArray = i;
+        	 if(currentDiameterInHoles > holeTrhshold)
+        		 isCurrectDetection = true;
+        	 //isCurrectDetection =true;
+         }
+    }
+    imshow("BallDetector: greenMatrixImage", greenMatrixImage);
+    waitKey(10);
+    if(!isCurrectDetection)
+    	return new DetectedBall;
+    finalRadius =cvRound(circlesInField[chosenCenterLocationInArray][2]);
+    finalCenter= new Point(cvRound(circlesInField[chosenCenterLocationInArray][0]), cvRound(circlesInField[chosenCenterLocationInArray][1]));
+    circle(houghCircleInputGray, *finalCenter, (float)finalRadius, Colors::Blue, 2);
+
+	return new DetectedBall(*finalCenter, (float)finalRadius, 0);
+
+
+    /* TODO: strat of the old code
     for( size_t i = 0; i < circlesInField.size(); i++ )
     {
     	 Point2f center(circlesInField[i][0], circlesInField[i][1]);
@@ -273,6 +379,7 @@ DetectedObject* BallDetector::probabilisticBallDetection(Mat& inputImageHSV)
     circle(houghCircleInputGray, *finalCenter, (float)finalRadius, Colors::Blue, 2);
 
 	return new DetectedBall(*finalCenter, (float)finalRadius, 0);
+	*/ //TODO: end of old code
 	//return new DetectedBall();
 
 
@@ -298,3 +405,5 @@ DetectedObject* BallDetector::probabilisticBallDetection(Mat& inputImageHSV)
 //		maxCentersForRecursiveFilter.push_back(max_center);
 //	}
 }
+
+
