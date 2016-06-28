@@ -11,7 +11,7 @@
 #define MAX_TIME_DIFF 1000000
 #define MIN_TIME_DIFF 1000
 #define MIN_LOCATION_DIFF 10
-#define CENTER_MARGIN 10
+#define CENTER_MARGIN 30
 
 #include "BallMovement.h"
 #include "../../Vision/DetectedObjects/TimedDetectedBall.h"
