@@ -1,4 +1,5 @@
 #include "LookForBall.h"
+#include "../../BrainData.h"
 
 LookForBall::LookForBall()
 {
@@ -17,7 +18,7 @@ void LookForBall::Run()
 
 	tilt = TiltMin;
 	pan = PanMaxRight;
-	usleep(3000*1000);
+	//usleep(3000*1000);
 	while (!m_Vision->Ball->Get()->IsDetected && MotionStatus::FALLEN == STANDUP)
 	{
 		m_Motion->SetHeadTilt(HeadTilt(tilt, pan));
@@ -54,7 +55,7 @@ void LookForBall::CenterBall()
 {
 	WriteLine("Centering ball");
 	usleep(3000*1000);
-	Point2f location = m_Vision->Ball->Get()->Location;BallMovement
+	Point2f location = m_Vision->Ball->Get()->Location;
 	float tilt = m_Motion->GetHeadTilt().Tilt;
 	float pan = m_Motion->GetHeadTilt().Pan;
 

@@ -13,10 +13,6 @@ StateMachine::StateMachine()
 	m_currentState = new Init();
 }
 
-StateMachine::StateMachine(State* state){
-	m_currentState = state;
-}
-
 StateMachine::~StateMachine()
 {
 }
@@ -66,10 +62,11 @@ void StateMachine::Run()
 					break;
 
 				case STATE_SET:
+					stateName = State_Init;
 					break;
 
 				case STATE_PLAYING:
-					stateName = State_Init;
+					stateName = State_LookForBall;
 					break;
 
 				case STATE_FINISHED:
@@ -81,7 +78,14 @@ void StateMachine::Run()
 		switch (stateName)
 		{
 		case State_Init:
-			m_nextState = new LookForBall();
+			while (!IsNewRefereeMsg())
+			{
+				//wait for game to start
+			}
+			if (Communication::GetInstance()->ReadDataAndClearFlag().state == STATE_PLAYING)
+			{
+				m_nextState = new LookForBall();
+			}
 			break;
 
 		case State_LookForGoal:

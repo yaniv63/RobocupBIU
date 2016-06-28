@@ -1,5 +1,6 @@
 #include "Motion.h"
 #include "MotionIncludes.h"
+#include "../Brain/BrainData.h"
 
 Motion* Motion::m_instance = NULL;
 Motion* Motion::GetInstance()
@@ -97,6 +98,14 @@ void Motion::StartWalking(int x_amp, int y_amp, int a_amp)
 	Walking::GetInstance()->Y_MOVE_AMPLITUDE = y_amp;
 	Walking::GetInstance()->A_MOVE_AMPLITUDE = a_amp;
 	Walking::GetInstance()->Start();
+}
+
+void Motion::StartWalking(double distance)
+{
+	double timeToWalk = distance / BrainData::GetInstance()->WALK_SPEED;
+	StartWalking();
+	usleep(timeToWalk*1000000); //convert sec to microsec
+	StopWalking();
 }
 
 void Motion::StopWalking()

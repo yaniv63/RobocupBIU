@@ -1,6 +1,7 @@
 #include "Brain.h"
 #include "MenuOption.h"
 #include "../Common/PlayerInfo.h"
+#include "BrainData.h"
 
 // Declartion of the thread method.
 void* BrainActionAsync(void*);
