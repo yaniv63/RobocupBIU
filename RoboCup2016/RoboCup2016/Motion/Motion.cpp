@@ -83,7 +83,7 @@ void Motion::StartWalking()
 {
 	Head::GetInstance()->m_Joint.SetEnableHeadOnly(true, true);
 	Walking::GetInstance()->m_Joint.SetEnableBodyWithoutHead(true, true);
-	Walking::GetInstance()->X_MOVE_AMPLITUDE = 0;
+	Walking::GetInstance()->X_MOVE_AMPLITUDE = 5;
 	Walking::GetInstance()->Y_MOVE_AMPLITUDE = 0;
 	Walking::GetInstance()->A_MOVE_AMPLITUDE = 0;
 	Walking::GetInstance()->Start();
@@ -112,14 +112,15 @@ void Motion::GetUp()
 	Action::GetInstance()->m_Joint.SetEnableBody(true, true);
 
 	if (MotionStatus::FALLEN == FORWARD)
-		//Action::GetInstance()->Start(1);   // FORWARD GETUP 10
-		printf( "Robot has fallen forward.\n");
+	{
+		RunAction(ActionPage::FrontGetup);// FORWARD GETUP 70
+		//printf( "Robot has fallen forward.\n");
+	}
 	else if (MotionStatus::FALLEN == BACKWARD)
-		//Action::GetInstance()->Start(1);   // BACKWARD GETUP 11
-		printf( "Robot has fallen backward.\n");
-	while (Action::GetInstance()->IsRunning() == 1) usleep(8000);
-	// Go back to Walk Ready
-	//mWalkReady(arbotixpro);
+	{
+		RunAction(ActionPage::BackGetup);// BACKWARD GETUP 75
+		//printf( "Robot has fallen backward.\n");
+	}
 }
 
 void Motion::FreeAllEngines()

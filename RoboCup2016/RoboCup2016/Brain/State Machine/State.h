@@ -12,7 +12,8 @@ enum StateName
 	State_ChangeSpot,
 	State_Kick,
 	State_LookForBall,
-	State_LookForGoal
+	State_LookForGoal,
+	State_Finished
 };
 
 

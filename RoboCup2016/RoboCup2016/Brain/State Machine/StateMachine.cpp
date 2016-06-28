@@ -5,6 +5,8 @@
 #include "States/GoToBall.h"
 #include "States/Kick.h"
 #include "States/LookForGoal.h"
+#include "../../Communication/Communication.h"
+#include "../../Communication/RoboCupGameControlData.h"
 
 StateMachine::StateMachine()
 {
@@ -24,18 +26,54 @@ void StateMachine::Run()
 {
 	StateName stateName;
 	string stateVariable = "";
+	RoboCupGameControlData refereeData;
 	while (m_currentState != NULL)
 	{
+		m_currentState->Run();
+		stateName = m_currentState->Name();
+		stateVariable = m_currentState->GetStateVariable();
+
+		if (m_currentState != NULL)
+		{
+			delete m_currentState;
+		}
+
+		//cout << stateName << endl;
+
+		////// FALL CHECK ////////////
+
 		if (MotionStatus::FALLEN != STANDUP)
 		{
 			Motion::GetInstance()->GetUp();
 			m_currentState = new LookForBall(); //TODO - check
 		}
 
-		m_currentState->Run();
-		stateName = m_currentState->Name();
-		stateVariable = m_currentState->GetStateVariable();
-		cout << stateName << endl;
+		////////////// REFEREE MESSAGE ///////////////////////
+
+		if (IsNewRefereeMsg())
+		{
+			refereeData = Communication::GetInstance()->ReadDataAndClearFlag();
+			switch (refereeData.state)
+			{
+				case STATE_INITIAL:
+					break;
+
+				case STATE_READY:
+					break;
+
+				case STATE_SET:
+					break;
+
+				case STATE_PLAYING:
+					stateName = State_Init;
+					break;
+
+				case STATE_FINISHED:
+					stateName = State_Finished;
+					break;
+			}
+		}
+
 		switch (stateName)
 		{
 		case State_Init:
@@ -45,12 +83,11 @@ void StateMachine::Run()
 		case State_LookForGoal:
 			if (stateVariable == "GoalFound")
 			{
-				m_nextState = new LookForBall();
+				m_nextState = new Kick(true);
 			}
 			else if (stateVariable == "GoalNotFound")
 			{
-				//keep looking
-				m_nextState = new ChangeSpot();
+				m_nextState = new Kick(false);
 			}
 			break;
 
@@ -73,7 +110,7 @@ void StateMachine::Run()
 		case State_GoToBall:
 			if (stateVariable == "InKickDistance")
 			{
-				m_nextState = new Kick();
+				m_nextState = new LookForGoal();
 			}
 			else if (stateVariable == "BallLost")
 			{
@@ -82,13 +119,15 @@ void StateMachine::Run()
 			break;
 
 		case State_Kick:
-			m_nextState = NULL;
-			//m_nextState = new LookForBall();
+			m_nextState = new LookForBall();
 			break;
 
 		case State_ChangeSpot:
 			m_nextState = new LookForBall();
 			break;
+
+		case State_Finished:
+			m_nextState = NULL;
 
 		default:
 			m_nextState = NULL;
@@ -96,4 +135,9 @@ void StateMachine::Run()
 		}
 		m_currentState = m_nextState;
 	}
+}
+
+bool StateMachine::IsNewRefereeMsg()
+{
+	return Communication::GetInstance()->getFlag();
 }
