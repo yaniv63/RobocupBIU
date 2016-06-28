@@ -1,5 +1,6 @@
 #include "Brain.h"
 #include "MenuOption.h"
+#include "../Common/PlayerInfo.h"
 
 // Declartion of the thread method.
 void* BrainActionAsync(void*);
@@ -57,9 +58,21 @@ void* BrainActionAsync(void*)
 			{
 				motion->StartEngines();
 				Log::GetInstance()->Info("Starting to play", "Brain");
-				StateMachine fsm;
-				fsm.Run();
+				PlayerInfo info;
+				StateMachine* fsm;
+				cout << "before select statemachine type"<<endl;
+				if (info.isGoalkeeper == GOALKEEPER){
+					cout << "entered to goalkeeper statem machine"<<endl;
+					fsm = new GoalKeeperStateMachine();
+				}
+				else {
+					fsm = new StateMachine();
+				}
+				fsm->Run();
 				terminate = true;
+				if(fsm != NULL){
+				delete fsm;
+				}
 				break;
 			}
 			case Stand:
@@ -106,6 +119,7 @@ void* BrainActionAsync(void*)
 				{
 					//printf( "Robot is walking!\n");
 					//keep walking
+
 				}*/
 				break;
 			}

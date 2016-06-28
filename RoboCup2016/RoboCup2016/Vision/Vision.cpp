@@ -81,7 +81,6 @@ void Vision::Run()
 				m_VideoCapture >> currentFrame;
 
 				Vision::GetInstance()->ProcessCurrentFrame(currentFrame);
-
 				imshow("Output", currentFrame);
 				key = waitKey(1);
 

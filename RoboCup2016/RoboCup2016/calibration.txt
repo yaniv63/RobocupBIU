@@ -9,5 +9,3 @@ Our GK Max HSV:[145,84,84]
 
 Opposite GK Min HSV:[169,46,50]
 Opposite GK Max HSV:[176,134,76]
-
-
