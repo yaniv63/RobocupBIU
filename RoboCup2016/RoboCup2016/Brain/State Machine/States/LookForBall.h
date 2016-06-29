@@ -7,5 +7,5 @@ class LookForBall : public State
 	virtual ~LookForBall();
 
 	virtual void Run();
-	void CenterBall();
+	bool CenterBall();
 };

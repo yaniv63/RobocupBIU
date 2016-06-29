@@ -119,6 +119,10 @@ void StateMachine::Run()
 			{
 				m_nextState = new LookForBall();
 			}
+			else if (stateVariable == "BallLost")
+			{
+				m_nextState = new LookForBall();
+			}
 			break;
 
 		case State_GoToBall:

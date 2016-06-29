@@ -46,12 +46,18 @@ void LookForBall::Run()
 
 	//Ball detected successfully
 	WriteLine("Ball found");
-	CenterBall();
-	m_stateVariable = "BallFound";
+	if (!CenterBall())
+	{
+		m_stateVariable = "BallLost";
+	}
+	else
+	{
+		m_stateVariable = "BallFound";
+	}
 	return;
 }
 
-void LookForBall::CenterBall()
+bool LookForBall::CenterBall()
 {
 	WriteLine("Centering ball");
 	usleep(3000*1000);
@@ -63,6 +69,10 @@ void LookForBall::CenterBall()
 
 	while (location.x < 300 || location.x > 340 || location.y < 220 || location.y > 260)
 	{
+		if (location.x == -1 || location.y == -1)
+		{
+			return false;
+		}
 		if (location.x < 300)
 		{
 			//turn head right
@@ -93,6 +103,6 @@ void LookForBall::CenterBall()
 		location = m_Vision->Ball->Get()->Location;
 		cout << "x " << location.x <<endl;
 		cout << "y " << location.y <<endl;
-
 	}
+	return true;
 }
