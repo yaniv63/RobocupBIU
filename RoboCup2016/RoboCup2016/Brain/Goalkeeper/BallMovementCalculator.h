@@ -9,9 +9,10 @@
 #define BRAIN_GOALKEEPER_BALLMOVEMENTCALCULATOR_H_
 
 #define MAX_TIME_DIFF 1000000
-#define MIN_TIME_DIFF 1000
+#define MIN_TIME_DIFF 500
 #define MIN_LOCATION_DIFF 10
-#define CENTER_MARGIN 30
+#define CENTER_MARGIN 50
+#define CROSSING_PIXEL FRAME_HEIGHT + 100
 
 #include "BallMovement.h"
 #include "../../Vision/DetectedObjects/TimedDetectedBall.h"
@@ -36,15 +37,17 @@ private:
 	bool IsLocationDiffValid();
 	bool IsEnoughSamples();
 
+	vector<TimedDetectedBall> GetRelevantSamples();
+
 	double GetRelativeTimeToFirstSample(double detectionTime);
 
 	TimedDetectedBall m_SamplesArray[NUM_OF_SAMPLES];
 
-	vector<double> GetYValues();
-	vector<double> GetXValues();
-	vector<double> GetTimes();
+	vector<double> GetYValues(vector<TimedDetectedBall> samples);
+	vector<double> GetXValues(vector<TimedDetectedBall> samples);
+	vector<double> GetTimes(vector<TimedDetectedBall> samples);
 
-	void PrintCalculationData(Mat& image);
+	void PrintCalculationData(Mat& image, vector<TimedDetectedBall> relevantSamples);
 };
 
 #endif /* BRAIN_GOALKEEPER_BALLMOVEMENTCALCULATOR_H_ */

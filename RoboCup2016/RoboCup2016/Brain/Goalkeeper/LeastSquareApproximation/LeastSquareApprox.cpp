@@ -40,7 +40,7 @@ double LeastSquareApprox::SumVectorPower2(vector<double> vector)
 double LeastSquareApprox::SumMultiplyVectors(vector<double> v1, vector<double> v2)
 {
 	double result = 0;
-	for (int i = 0 ; i < NUM_OF_SAMPLES_TO_APPROX ; i++)
+	for (int i = 0 ; i < v1.size() ; i++)
 	{
 		result += v1[i] * v2[i];
 	}
@@ -51,7 +51,7 @@ Mat LeastSquareApprox::BuildDataMatrix(vector<double> inputVector, int dimension
 {
 	vector<double> dataAsVector;
 
-		for (int i = 0 ; i < NUM_OF_SAMPLES_TO_APPROX ; i++)
+		for (int i = 0 ; i < inputVector.size() ; i++)
 		{
 			for (int j = 0 ; j <= dimensions ; j++)
 			{
@@ -59,7 +59,7 @@ Mat LeastSquareApprox::BuildDataMatrix(vector<double> inputVector, int dimension
 			}
 		}
 
-		Mat A(NUM_OF_SAMPLES_TO_APPROX, dimensions + 1, CV_64FC1);
+		Mat A(inputVector.size(), dimensions + 1, CV_64FC1);
 		memcpy(A.data,dataAsVector.data(),dataAsVector.size()*sizeof(double));
 
 		return A;
