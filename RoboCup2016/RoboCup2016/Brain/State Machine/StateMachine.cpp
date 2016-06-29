@@ -5,6 +5,7 @@
 #include "States/GoToBall.h"
 #include "States/Kick.h"
 #include "States/LookForGoal.h"
+#include "States/GoToBasePosition.h"
 #include "../../Communication/Communication.h"
 #include "../../Communication/RoboCupGameControlData.h"
 
@@ -27,19 +28,9 @@ void StateMachine::Run()
 	StateName stateName;
 	string stateVariable = "";
 	RoboCupGameControlData refereeData;
+
 	while (m_currentState != NULL)
 	{
-		m_currentState->Run();
-		stateName = m_currentState->Name();
-		stateVariable = m_currentState->GetStateVariable();
-
-		if (m_currentState != NULL)
-		{
-			delete m_currentState;
-		}
-
-		//cout << stateName << endl;
-
 		////// FALL CHECK ////////////
 
 		if (MotionStatus::FALLEN != STANDUP)
@@ -59,20 +50,30 @@ void StateMachine::Run()
 					break;
 
 				case STATE_READY:
+					m_currentState = new GoToBasePosition();
 					break;
 
 				case STATE_SET:
-					stateName = State_Init;
+					m_currentState = new Init();
 					break;
 
 				case STATE_PLAYING:
-					stateName = State_LookForBall;
+					m_currentState = new LookForBall();
 					break;
 
 				case STATE_FINISHED:
 					stateName = State_Finished;
 					break;
 			}
+		}
+
+		m_currentState->Run();
+		stateName = m_currentState->Name();
+		stateVariable = m_currentState->GetStateVariable();
+
+		if (m_currentState != NULL)
+		{
+			delete m_currentState;
 		}
 
 		switch (stateName)
@@ -118,7 +119,7 @@ void StateMachine::Run()
 		case State_GoToBall:
 			if (stateVariable == "InKickDistance")
 			{
-				m_nextState = new LookForGoal();
+				m_nextState = new Kick(true);
 			}
 			else if (stateVariable == "BallLost")
 			{
@@ -132,6 +133,10 @@ void StateMachine::Run()
 
 		case State_ChangeSpot:
 			m_nextState = new LookForBall();
+			break;
+
+		case State_GoToBasePosition:
+			m_nextState = new Init();
 			break;
 
 		case State_Finished:

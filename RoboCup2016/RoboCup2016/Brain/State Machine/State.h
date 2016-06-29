@@ -13,32 +13,11 @@ enum StateName
 	State_Kick,
 	State_LookForBall,
 	State_LookForGoal,
+	State_GoToBasePosition,
 	State_Finished
 };
 
-
-enum StatePageNum
-{
-	Page_Init,
-	Page_GoForBall,
-	Page_ChangeSpot,
-	Page_Kick = 4,
-	Page_LookForBall,
-	Page_LookForGoal,
-	Page_JumpToTheRight,
-	Page_JumpToTheLeft,
-	Page_Wave
-};
-
-enum LookDirection
-{
-	DIR_Straight,
-	DIR_Down,
-	DIR_Left,
-	DIR_Right
-};
-
-static const int TiltMax = 10;
+static const int TiltMax = -10;
 static const int TiltMin = -55;
 static const int PanMaxLeft = 70;
 static const int PanMaxRight = -70;

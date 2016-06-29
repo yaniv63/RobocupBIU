@@ -19,7 +19,7 @@ void GoToBall::Run()
 {
 	float angleToBall = m_Motion->GetHeadTilt().Pan;
 	cout<<"pan is " << angleToBall << endl;
-	turnToBall(angleToBall);
+	m_Motion->TurnByAngle(angleToBall); //turn to ball
 	//start timing
 	clock_t startingTime;
 	double duration = 0;
@@ -43,6 +43,8 @@ void GoToBall::Run()
 		//pause timing
 		duration += (clock() - startingTime ) / (double) CLOCKS_PER_SEC;
 
+		m_Motion->StopWalking();
+
 		m_Motion->RunAction(ActionPage::BendToBall);
 		if (m_Vision->Ball->Get()->IsDetected)
 		{
@@ -61,23 +63,6 @@ void GoToBall::Run()
 	//stop timing
 	duration += (clock() - startingTime) / (double)CLOCKS_PER_SEC;
 	BrainData::GetInstance()->UpdateAll(duration, angleToBall);
-}
-
-void GoToBall::turnToBall(float angleToBall)
-{
-	if(angleToBall == 0)
-		return;
-	else if(angleToBall > 0)
-		m_Motion->StartWalking(-5,0,24);
-	else if(angleToBall < 0)
-	{
-		angleToBall = -angleToBall;
-		m_Motion->StartWalking(-5,0,-24);
-	}
-
-	usleep(factor*angleToBall*24);
-	m_Motion->StopWalking();
-	m_Motion->SetHeadTilt(HeadTilt(0,0));
 }
 
 

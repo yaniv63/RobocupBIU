@@ -1,4 +1,5 @@
 #include "Init.h"
+#include "../../BrainData.h"
 
 Init::Init()
 {
@@ -12,6 +13,7 @@ Init::~Init()
 
 void Init::Run()
 {
+	BrainData::GetInstance();
 }
 
 

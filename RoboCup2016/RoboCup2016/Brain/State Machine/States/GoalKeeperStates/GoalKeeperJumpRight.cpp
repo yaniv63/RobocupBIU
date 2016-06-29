@@ -17,6 +17,5 @@ GoalKeeperJumpRight::~GoalKeeperJumpRight() {
 
 void GoalKeeperJumpRight::Run(){
 	cout <<"in GoalKeeperJumpRight Run"<<endl;
-	//Action::GetInstance()->Start(Page_JumpToTheRight);
-	//m_Motion->WaitForActionFinish();
+	m_Motion->RunAction(ActionPage::RightDive);
 }

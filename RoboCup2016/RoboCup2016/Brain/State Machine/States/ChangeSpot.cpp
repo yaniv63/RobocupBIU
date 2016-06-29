@@ -25,6 +25,7 @@ void ChangeSpot::Run()
 	m_Motion->SetHeadTilt(HeadTilt(0,0));
 
 	BrainData::GetInstance()->UpdateAll(0, angle);
+
 }
 
 

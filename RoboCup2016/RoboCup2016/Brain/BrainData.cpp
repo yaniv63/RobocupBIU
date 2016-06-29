@@ -104,6 +104,14 @@ void BrainData::CalcWayBackToDefaultPos()
 	}
 }
 
+void BrainData::Reset()
+{
+	DistanceToGoal = DEFAULT_DISTANCE_TO_GOAL; //center player
+	posX = 0;
+	posY = 0;
+	DecideInitPos();
+}
+
 
 
 
