@@ -3,7 +3,6 @@
 LookForGoal::LookForGoal()
 {
 	m_StateName = State_LookForGoal;
-	m_lookDirection = DIR_Straight;
 }
 
 LookForGoal::~LookForGoal()

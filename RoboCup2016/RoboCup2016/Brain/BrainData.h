@@ -4,7 +4,6 @@ class BrainData
 	public:
 	double DefaultDistanceToGoal;
 	double DistanceToGoal;
-	double DistanceToBall;
 	double AngleFromGoal;
 	double AngleToDefaultPos;
 	double DistanceToDefaultPos;
@@ -25,6 +24,7 @@ class BrainData
 	void UpdatePos(double distanceWalked,double angleWalked);
 	void UpdateAll(double timeWalked, double angleWalked);
 	void CalcWayBackToDefaultPos();
+	void Reset();
 
 	private:
 	static BrainData* m_instance;

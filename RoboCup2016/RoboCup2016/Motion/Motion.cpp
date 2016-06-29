@@ -132,6 +132,23 @@ void Motion::GetUp()
 	}
 }
 
+void Motion::TurnByAngle(double angle)
+{
+	if(angle == 0)
+		return;
+	else if(angle > 0)
+		StartWalking(-5,0,24);
+	else if(angle < 0)
+	{
+		angle = -angle;
+		StartWalking(-5,0,-24);
+	}
+
+	usleep(factor*angle*24);
+	StopWalking();
+	SetHeadTilt(HeadTilt(0,0));
+}
+
 void Motion::FreeAllEngines()
 {
 	arbotixpro.WriteByte(ArbotixPro::ID_CM, MXDXL::P_TORQUE_ENABLE, 0, 0);

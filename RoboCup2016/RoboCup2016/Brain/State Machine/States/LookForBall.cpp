@@ -4,7 +4,6 @@
 LookForBall::LookForBall()
 {
 	m_StateName = State_LookForBall;
-	m_lookDirection = DIR_Straight;
 }
 
 LookForBall::~LookForBall()

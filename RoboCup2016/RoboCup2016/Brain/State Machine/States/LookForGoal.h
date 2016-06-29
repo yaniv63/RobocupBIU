@@ -7,7 +7,4 @@ class LookForGoal : public State
 	virtual ~LookForGoal();
 
 	virtual void Run();
-
-	private:
-	LookDirection m_lookDirection;
 };
