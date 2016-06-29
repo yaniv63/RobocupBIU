@@ -23,6 +23,8 @@ private:
 
 	map<int,DatabaseWrapper*> m_tiltToDatabase;
 	int FindClosestTiltInMap(int headTilt);
+	int FindClosestLargerTiltInMap(int headTilt);
+	int FindClosestSmallerTiltInMap(int headTilt);
 };
 
 #endif /* VISION_DETECTEDOBJECTS_BALLDISTANCECALCULATOR_H_ */

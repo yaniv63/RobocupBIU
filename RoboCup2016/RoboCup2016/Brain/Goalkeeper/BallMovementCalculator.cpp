@@ -29,14 +29,15 @@ void BallMovementCalculator::ResetSamples()
 BallMovement BallMovementCalculator::CalculateBallMovement(TimedDetectedBall timedDetectedBall)
 {
 	Mat image(480,640, CV_8UC3, Scalar(0,0,0));
-	if(DEBUG_MODE)
-	{
-		PrintCalculationData(image);
-	}
 
 	if (!timedDetectedBall.IsDetected)
 	{
 		return BallMovement::BallNotDetected();
+	}
+
+	if(timedDetectedBall.DetectionTime - m_SamplesArray[0].DetectionTime > 2)
+	{
+		ResetSamples();
 	}
 
 	if (IsNewSampleRelevant(timedDetectedBall))
@@ -44,32 +45,39 @@ BallMovement BallMovementCalculator::CalculateBallMovement(TimedDetectedBall tim
 		PushDetectedBallToQueue(timedDetectedBall);
 	}
 
-	if (!IsEnoughSamples())
+//	if (!IsEnoughSamples())
+//	{
+//		return BallMovement::NotEnoughSamples();
+//	}
+
+	vector<TimedDetectedBall> relevantSamples = GetRelevantSamples();
+
+	if(relevantSamples.size() < MIN_NUM_OF_SAMPLES_TO_APPROX)
 	{
 		return BallMovement::NotEnoughSamples();
 	}
 
-	if (!IsTimeDiffValid())
-	{
-		return BallMovement::InvalidTimeDiff();
-	}
+//	if (!IsTimeDiffValid())
+//	{
+//		return BallMovement::InvalidTimeDiff();
+//	}
 //
 //	if (!IsLocationDiffValid())
 //	{
 //		return BallMovement::InvalidLocationDiff();
 //	}
 
-	LeastSquareApprox* ballMovementApprox = LineApprox::Approx(GetYValues(), GetXValues());
+	LeastSquareApprox* ballMovementApprox = LineApprox::Approx(GetYValues(relevantSamples), GetXValues(relevantSamples));
 	JumpDirection jumpDirection = CalculateDirection(ballMovementApprox);
 
-	LeastSquareApprox* timingApprox = ParabolaApprox::Approx(GetYValues(), GetTimes());
+	LeastSquareApprox* timingApprox = ParabolaApprox::Approx(GetYValues(relevantSamples), GetTimes(relevantSamples));
 	float msToJump = CalculateJumpingTime(timingApprox);
 
 	BallMovement ballMovement(jumpDirection, msToJump);
 
 	if(DEBUG_MODE)
 	{
-		PrintCalculationData(image);
+		PrintCalculationData(image, relevantSamples);
 		ballMovement.PrintDetailsOnImage(image, Point(0, (NUM_OF_SAMPLES + 1)*20));
 	}
 	imshow("Ball movement calc", image);
@@ -77,7 +85,35 @@ BallMovement BallMovementCalculator::CalculateBallMovement(TimedDetectedBall tim
 	return ballMovement;
 }
 
-void BallMovementCalculator::PrintCalculationData(Mat& image)
+vector<TimedDetectedBall> BallMovementCalculator::GetRelevantSamples()
+{
+	vector<TimedDetectedBall> relevantSamples;
+	if (!m_SamplesArray[0].IsDetected)
+	{
+		return relevantSamples;
+	}
+
+	relevantSamples.push_back(m_SamplesArray[0]);
+	for (int i = 1 ; i < NUM_OF_SAMPLES ; i++)
+		{
+			double prevTime = GetRelativeTimeToFirstSample(m_SamplesArray[i - 1].DetectionTime);
+			double currentTime = GetRelativeTimeToFirstSample(m_SamplesArray[i].DetectionTime);
+
+			Point2d prevLocation = m_SamplesArray[i - 1].Location;
+			Point2d currentLocation = m_SamplesArray[i].Location;
+
+			if(m_SamplesArray[i].IsDetected &&
+				currentTime - prevTime < MIN_TIME_DIFF &&
+				prevLocation.y > currentLocation.y)
+			{
+				relevantSamples.push_back(m_SamplesArray[i]);
+			}
+		}
+	relevantSamples.pop_back();
+	return relevantSamples;
+}
+
+void BallMovementCalculator::PrintCalculationData(Mat& image, vector<TimedDetectedBall> relevantSamples)
 {
 	char message[256];
 	for (int i = 0 ; i < NUM_OF_SAMPLES ; i++)
@@ -129,19 +165,19 @@ bool BallMovementCalculator::IsNewSampleRelevant(TimedDetectedBall timedDetected
 	return true;
 }
 
-bool BallMovementCalculator::IsTimeDiffValid()
-{
-	for (int i = 0 ; i < NUM_OF_SAMPLES_TO_APPROX ; i++)
-	{
-		if (m_SamplesArray[i].DetectionTime
-				- m_SamplesArray[i+1].DetectionTime > MAX_TIME_DIFF)
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
+//bool BallMovementCalculator::IsTimeDiffValid()
+//{
+//	for (int i = 0 ; i < NUM_OF_SAMPLES_TO_APPROX ; i++)
+//	{
+//		if (m_SamplesArray[i].DetectionTime
+//				- m_SamplesArray[i+1].DetectionTime > MAX_TIME_DIFF)
+//		{
+//			return false;
+//		}
+//	}
+//
+//	return true;
+//}
 
 bool BallMovementCalculator::IsEnoughSamples()
 {
@@ -167,32 +203,32 @@ bool BallMovementCalculator::IsLocationDiffValid()
 	return true;
 }
 
-vector<double> BallMovementCalculator::GetYValues()
+vector<double> BallMovementCalculator::GetYValues(vector<TimedDetectedBall> samples)
 {
 	vector<double> result;
-	for (int i = 0 ; i < NUM_OF_SAMPLES_TO_APPROX ; i++)
+	for (int i = 0 ; i < samples.size() ; i++)
 		{
-			result.push_back(m_SamplesArray[i].Location.y);
+			result.push_back(samples[i].Location.y);
 		}
 	return result;
 }
 
-vector<double> BallMovementCalculator::GetXValues()
+vector<double> BallMovementCalculator::GetXValues(vector<TimedDetectedBall> samples)
 {
 	vector<double> result;
-		for (int i = 0 ; i < NUM_OF_SAMPLES_TO_APPROX ; i++)
+		for (int i = 0 ; i < samples.size() ; i++)
 			{
-				result.push_back(m_SamplesArray[i].Location.x);
+				result.push_back(samples[i].Location.x);
 			}
 		return result;
 }
 
-vector<double> BallMovementCalculator::GetTimes()
+vector<double> BallMovementCalculator::GetTimes(vector<TimedDetectedBall> samples)
 {
 	vector<double> result;
-	for (int i = 0; i < NUM_OF_SAMPLES_TO_APPROX; i++)
+	for (int i = 0; i < samples.size(); i++)
 	{
-		result.push_back(GetRelativeTimeToFirstSample(m_SamplesArray[i].DetectionTime));
+		result.push_back(GetRelativeTimeToFirstSample(samples[i].DetectionTime));
 	}
 	return result;
 }
@@ -200,7 +236,7 @@ vector<double> BallMovementCalculator::GetTimes()
 JumpDirection BallMovementCalculator::CalculateDirection(LeastSquareApprox* directionApprox)
 {
 	// The x value that the ball will cross the bottom boundary of the frame will determine the jump direction.
-	double approxX = directionApprox->GetB(FRAME_HEIGHT - 1);
+	double approxX = directionApprox->GetB(CROSSING_PIXEL);
 
 	if (approxX > FRAME_WIDTH * 2 || approxX < -FRAME_WIDTH)
 	{
@@ -219,5 +255,5 @@ JumpDirection BallMovementCalculator::CalculateDirection(LeastSquareApprox* dire
 
 double BallMovementCalculator::CalculateJumpingTime(LeastSquareApprox* timingApprox)
 {
-	return timingApprox->GetB(FRAME_HEIGHT - 1) - GetRelativeTimeToFirstSample(m_SamplesArray[0].DetectionTime);
+	return timingApprox->GetB(CROSSING_PIXEL) - GetRelativeTimeToFirstSample(m_SamplesArray[0].DetectionTime);
 }

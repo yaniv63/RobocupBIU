@@ -18,6 +18,7 @@ public:
 	static inline DetectedObject* GetDefault() {return new DetectedBall();}
 
 private:
+	float CalculateDistance(Point2f center, float radius);
 	BallDistanceCalculator* m_BallDistanceCalculator;
 };
 

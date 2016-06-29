@@ -44,7 +44,7 @@ void LookForBall::Run()
 		m_stateVariable == "FellDown";
 	}
 
-	//Ball detected succesfully
+	//Ball detected successfully
 	WriteLine("Ball found");
 	CenterBall();
 	m_stateVariable = "BallFound";
@@ -96,5 +96,3 @@ void LookForBall::CenterBall()
 
 	}
 }
-
-

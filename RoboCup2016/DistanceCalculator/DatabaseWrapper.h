@@ -18,6 +18,9 @@ public:
 
 	int GetValueFromKey(int key);
 
+	static vector<int> GetMapKeys(map<int, int> inputMap);
+	static vector<int> GetMapValues(map<int, int> inputMap);
+
 private:
 	map<int, int> m_DatabaseMap;
 

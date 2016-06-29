@@ -5,8 +5,8 @@
  *      Author: root
  */
 
-//#ifndef DETECTEDLINE_H
-//#define DETECTEDLINE_H
+#ifndef DETECTEDLINE_H
+#define DETECTEDLINE_H
 
 #include "../DetectedObjects/DetectedObject.h"
 #pragma once
@@ -31,4 +31,4 @@ public:
 	LineType DetectedLineType;
 };
 
-//#endif /* DETECTEDLINE_H */
+#endif /* DETECTEDLINE_H */

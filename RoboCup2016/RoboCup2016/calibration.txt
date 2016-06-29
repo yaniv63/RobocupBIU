@@ -1,7 +1,7 @@
-White Min HSV:[73,15,79]
-White Max HSV:[125,158,190]
+White Min HSV:[0,0,140]
+White Max HSV:[173,61,216]
 
-Green Min HSV:[42,75,65]
+Green Min HSV:[36,55,53]
 Green Max HSV:[55,245,135]
 
 Our GK Min HSV:[29,17,66]
@@ -9,3 +9,4 @@ Our GK Max HSV:[145,84,84]
 
 Opposite GK Min HSV:[169,46,50]
 Opposite GK Max HSV:[176,134,76]
+

@@ -15,7 +15,7 @@ void WaitForKey();
 void BackupCurrentDatabase();
 void DrawMiddleColumn(Mat &image);
 
-int main()
+int main(int argc, char** argv)
 {
 //	WaitForKey();
 	//BackupCurrentDatabase();
@@ -29,7 +29,7 @@ int main()
 	videoCapture.set(CV_CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT);
 	videoCapture.set(CV_CAP_PROP_FRAME_WIDTH, FRAME_WIDTH);
 	videoCapture.open(0);
-	int tilt = MinTilt;
+	int tilt = atoi(argv[0]);
 
 	cout << "Press \"s\" to continue. Current tilt: " << tilt << endl;
 	while(true)
@@ -48,7 +48,7 @@ int main()
 			Mat element = getStructuringElement(MORPH_RECT,
 					Size(2 * morph_size + 1, 2 * morph_size + 1),
 					Point(morph_size, morph_size));
-			medianBlur(whiteImage, whiteImage, 3);
+			medianBlur(whiteImage, whiteImage, 5);
 
 			Mat whiteOutput = whiteImage.clone();
 			cvtColor(whiteOutput, whiteOutput, CV_GRAY2BGR);
