@@ -35,12 +35,14 @@ public:
 
 	virtual string GetStateVariable();
 
-	string StateNamesStrings[6] = {"Init",
+	string StateNamesStrings[8] = {"Init",
 								"GoToBall",
 								"ChangeSpot",
 								"Kick",
 								"LookForBall",
-								"LookForGoal"};
+								"LookForGoal",
+								"GoToBasePosition",
+								"Finished"};
 
 protected:
 	State();

@@ -69,24 +69,29 @@ void StateMachine::Run()
 
 		m_currentState->Run();
 		stateName = m_currentState->Name();
+		cout << "State name is " << m_currentState->NameToString() << endl;
 		stateVariable = m_currentState->GetStateVariable();
+		cout << "stateVariable is " << stateVariable;
 
-		if (m_currentState != NULL)
+		/*if (m_currentState != NULL)
 		{
+			cout << "deleteing" << endl;
 			delete m_currentState;
-		}
+		}*/
 
 		switch (stateName)
 		{
 		case State_Init:
-			while (!IsNewRefereeMsg())
+			/*while (!IsNewRefereeMsg())
 			{
 				//wait for game to start
+				cout << "Waiting for game to start..." << endl;
 			}
 			if (Communication::GetInstance()->ReadDataAndClearFlag().state == STATE_PLAYING)
 			{
 				m_nextState = new LookForBall();
-			}
+			}*/
+			m_nextState = new LookForBall(); //in case we want to ignore the referee
 			break;
 
 		case State_LookForGoal:

@@ -30,6 +30,7 @@ void LookForBall::Run()
 			if (tilt > -10)
 			{
 				m_stateVariable = "BallNotFound";
+				m_Motion->SetHeadTilt(HeadTilt(0, 0));
 				return;
 			}
 		}

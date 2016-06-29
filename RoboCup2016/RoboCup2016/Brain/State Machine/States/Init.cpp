@@ -4,6 +4,7 @@
 Init::Init()
 {
 	m_StateName = State_Init;
+	m_stateVariable = "Initializing...";
 }
 
 Init::~Init()

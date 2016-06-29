@@ -23,7 +23,7 @@ Brain* Brain::GetInstance()
 
 Brain::Brain()
 {
-
+	isDebug = false;
 }
 
 Brain::~Brain()
@@ -50,120 +50,161 @@ void* BrainActionAsync(void*)
 	Motion* motion = Motion::GetInstance();
 	motion->StartEngines();
 
-	while (!terminate)
+	if (!Brain::GetInstance()->isDebug)
 	{
-		MenuOption menuOption = ShowMenuAndGetOptionFromUser();
-		switch (menuOption)
+		Brain::GetInstance()->Play();
+	}
+	else
+	{
+		while (!terminate)
 		{
-			case Play:
+			MenuOption menuOption = ShowMenuAndGetOptionFromUser();
+			switch (menuOption)
 			{
-				motion->StartEngines();
-				Log::GetInstance()->Info("Starting to play", "Brain");
-				PlayerInfo info;
-				StateMachine* fsm;
-				cout << "before select statemachine type"<<endl;
-				if (info.isGoalkeeper == GOALKEEPER){
-					cout << "entered to goalkeeper statem machine"<<endl;
-					fsm = new GoalKeeperStateMachine();
-				}
-				else {
-					fsm = new StateMachine();
-				}
-				fsm->Run();
-				terminate = true;
-				if(fsm != NULL){
-				delete fsm;
-				}
-				break;
-			}
-			case Stand:
-			{
-				motion->RunAction(ActionPage::Init);
-				break;
-			}
-			case Kick:
-			{
-				motion->RunAction(ActionPage::RightKick);
-				break;
-			}
-			case Exit:
-			{
-				terminate = true;
-				break;
-			}
-			case GetTilt:
-			{
-				HeadTilt currentTilt = motion->GetHeadTilt();
-				cout << "Pan: " << currentTilt.Pan << ", Tilt:" << currentTilt.Tilt << endl;
-				break;
-			}
-			case SetTilt:
-			{
-				float pan,tilt;
-				cout << "Enter pan to set:" << endl;
-				cin >> pan;
-				cout << "Enter tilt to set:" << endl;
-				cin >> tilt;
-				motion->SetHeadTilt(HeadTilt(tilt, pan));
-				break;
-			}
-
-			//TODO: Finish options
-			case Walk:
-			{
-				motion->StartWalking(0,5,0);
-				usleep(3000*1000);
-				motion->StopWalking();
-				//motion->StartWalking(5,0,0);
-
-				/*while (MotionStatus::FALLEN == STANDUP)
+				case Play:
 				{
-					//printf( "Robot is walking!\n");
-					//keep walking
-
-				}*/
-				break;
-			}
-
-			case TurnLeft:
-			{
-				break;
-			}
-
-			case TurnRight:
-			{
-				break;
-			}
-
-			case StopWalking:
-			{
-				motion->StopWalking();
-				break;
-			}
-
-			case Run:
-			{
-				motion->StartWalking();
-				for (int i=0; i<30; i++)
-				{
-					usleep(250*1000);
-					Walking::GetInstance()->X_MOVE_AMPLITUDE = i;
+					Log::GetInstance()->Info("Starting to play", "Brain");
+					PlayerInfo info;
+					StateMachine* fsm;
+					cout << "before select statemachine type"<<endl;
+					if (info.isGoalkeeper){
+						cout << "entered to goalkeeper statem machine"<<endl;
+						fsm = new GoalKeeperStateMachine();
+					}
+					else {
+						fsm = new StateMachine();
+					}
+					fsm->Run();
+					terminate = true;
+					if(fsm != NULL){
+					delete fsm;
+					}
+					break;
 				}
-				for (int i=30; i>0; i--)
+				case Stand:
 				{
-					usleep(250*1000);
-					Walking::GetInstance()->X_MOVE_AMPLITUDE = i;
+					motion->RunAction(ActionPage::Init);
+					break;
 				}
-				break;
-			}
+				case Kick:
+				{
+					motion->RunAction(ActionPage::RightKick);
+					break;
+				}
+				case Exit:
+				{
+					terminate = true;
+					break;
+				}
+				case GetTilt:
+				{
+					HeadTilt currentTilt = motion->GetHeadTilt();
+					cout << "Pan: " << currentTilt.Pan << ", Tilt:" << currentTilt.Tilt << endl;
+					break;
+				}
+				case SetTilt:
+				{
+					float pan,tilt;
+					cout << "Enter pan to set:" << endl;
+					cin >> pan;
+					cout << "Enter tilt to set:" << endl;
+					cin >> tilt;
+					motion->SetHeadTilt(HeadTilt(tilt, pan));
+					break;
+				}
 
-			case Reset:
-			{
-				break;
+				//TODO: Finish options
+				case Walk:
+				{
+					motion->StartWalking(0,5,0);
+					usleep(3000*1000);
+					motion->StopWalking();
+					//motion->StartWalking(5,0,0);
+
+					/*while (MotionStatus::FALLEN == STANDUP)
+					{
+						//printf( "Robot is walking!\n");
+						//keep walking
+
+					}*/
+					break;
+				}
+
+				case TurnLeft:
+				{
+					break;
+				}
+
+				case TurnRight:
+				{
+					break;
+				}
+
+				case StopWalking:
+				{
+					motion->StopWalking();
+					break;
+				}
+
+				case Run:
+				{
+					motion->StartWalking();
+					for (int i=0; i<30; i++)
+					{
+						usleep(250*1000);
+						Walking::GetInstance()->X_MOVE_AMPLITUDE = i;
+					}
+					for (int i=30; i>0; i--)
+					{
+						usleep(250*1000);
+						Walking::GetInstance()->X_MOVE_AMPLITUDE = i;
+					}
+					break;
+				}
+
+				case Reset:
+				{
+					break;
+				}
 			}
 		}
 	}
 	return NULL;
+}
+
+void Brain::Play()
+{
+	bool flag = true;
+	while (flag)
+	{
+		try
+		{
+			Log::GetInstance()->Info("Starting to play\n", "Brain");
+			PlayerInfo info;
+			StateMachine* fsm;
+			if (info.isGoalkeeper)
+			{
+				cout << "Goalkeeper statem machine selected"<<endl;
+				fsm = new GoalKeeperStateMachine();
+			}
+			else
+			{
+				fsm = new StateMachine();
+			}
+			fsm->Run();
+
+			if(fsm != NULL)
+			{
+				delete fsm;
+			}
+
+			flag = false; //finished successfully
+		}
+		catch (Exception ex)
+		{
+			cout << "Caught exception!!!. Msg: " << ex.msg << endl;
+		}
+	}
 }
 
 MenuOption ShowMenuAndGetOptionFromUser()
