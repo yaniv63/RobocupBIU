@@ -68,12 +68,7 @@ vector<string> DatabaseWrapper::StringSplit(const string& str, const string& del
 
 int DatabaseWrapper::FindClosestKey(int key)
 {
-	vector<int> mapKeys;
-	for (map<int, int>::iterator it = m_DatabaseMap.begin();
-			it != m_DatabaseMap.end(); ++it)
-	{
-		mapKeys.push_back(it->first);
-	}
+	vector<int> mapKeys = GetMapKeys(m_DatabaseMap);
 
 	int closestKey = mapKeys.front();
 	for (int i = 0; i < (int) mapKeys.size(); i++)
@@ -86,3 +81,29 @@ int DatabaseWrapper::FindClosestKey(int key)
 
 	return closestKey;
 }
+
+vector<int> DatabaseWrapper::GetMapKeys(map<int, int> inputMap)
+{
+	vector<int> keys;
+	for (map<int, int >::iterator it = inputMap.begin();
+			it != inputMap.end(); ++it)
+	{
+		keys.push_back(it->first);
+	}
+
+	return keys;
+}
+
+vector<int> DatabaseWrapper::GetMapValues(map<int, int> inputMap)
+{
+	vector<int> values;
+	for (map< int, int>::iterator it = inputMap.begin();
+			it != inputMap.end(); ++it)
+	{
+		values.push_back(it->second);
+	}
+
+	return values;
+}
+
+

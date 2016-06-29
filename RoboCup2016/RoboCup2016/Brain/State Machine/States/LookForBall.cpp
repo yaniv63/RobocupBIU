@@ -43,7 +43,7 @@ void LookForBall::Run()
 		m_stateVariable == "FellDown";
 	}
 
-	//Ball detected succesfully
+	//Ball detected successfully
 	WriteLine("Ball found");
 	CenterBall();
 	m_stateVariable = "BallFound";
@@ -54,7 +54,7 @@ void LookForBall::CenterBall()
 {
 	WriteLine("Centering ball");
 	usleep(3000*1000);
-	Point2f location = m_Vision->Ball->Get()->Location;BallMovement
+	Point2f location = m_Vision->Ball->Get()->Location;
 	float tilt = m_Motion->GetHeadTilt().Tilt;
 	float pan = m_Motion->GetHeadTilt().Pan;
 
@@ -95,5 +95,3 @@ void LookForBall::CenterBall()
 
 	}
 }
-
-

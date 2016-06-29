@@ -10,7 +10,7 @@
 TimedDetectedBall::TimedDetectedBall()
 	:DetectedBall()
 {
-	DetectionTime = -1;
+	DetectionTime = GetCurrentTime();
 }
 
 TimedDetectedBall::TimedDetectedBall(DetectedBall& detectedBall)

@@ -18,18 +18,20 @@ LineDetector::~LineDetector() {
 
 DetectedObject* LineDetector::DetectObject(Mat& inputImageHSV)
 {
-	/*Mat  cdst, dst, tempImage, src, blackWhiteImgeBGR;
+	Mat  cdst, dst, tempImage, src, blackWhiteImgeBGR;
 	Mat onlyWhiteImageLineDetector;
 	//GetWhiteImage(inputImageHSV, onlyWhiteImageLineDetector);
 	GetWhiteImage(inputImageHSV, src);
+	Mat elementG4 = getStructuringElement(MORPH_RECT, Size(5, 3), Point(2, 2));
+	//dilate(src, src, elementG4);
 	imshow("src black&white image", src);
-	waitKey(0);
-	medianBlur(src, src, 15);
-	imshow("src after blur", src);
+	//waitKey(0);
+	//medianBlur(src, src, 15);
+	//imshow("src after blur", src);
 	//cvtColor(onlyWhiteImageLineDetector, blackWhiteImgeBGR, CV_HSV2BGR);
 	//imshow("inputImageHSV after converting CV_HSV2BGR", inputImageHSV);
 	imshow("inputImageHSV", inputImageHSV);
-	waitKey(0);
+	//waitKey(0);
 	//ImageShowOnDebug("****Field and Contours - Shepet", "LineDetector", onlyWhiteImageLineDetector);
 
 	//string filePath = "C:\\Users\\arabinow\\git\\RoboCup2016\\Media\\Photos\\White Lines\\StraightLine.png";
@@ -47,7 +49,7 @@ DetectedObject* LineDetector::DetectObject(Mat& inputImageHSV)
 		//imshow("sub", inputImageHSV);
 		Canny(src, dst, 50, 200, 3);
 		imshow("dst after canny", dst);
-		waitKey(0);
+		//waitKey(0);
 		vector<vector<Point> > contours;
 		vector<Vec4i> hierarchy;
 
@@ -57,16 +59,18 @@ DetectedObject* LineDetector::DetectObject(Mat& inputImageHSV)
 		Mat fieldAOrContours;
 		bitwise_and(field, dst, fieldAOrContours);
 		imshow("fieldAOrContours after bitwise_and", fieldAOrContours);
-		waitKey(0);
+		//waitKey(0);
 		cvtColor(fieldAOrContours, cdst, CV_GRAY2BGR);
 		imshow("detected lines before line detection", cdst);
-		waitKey(0);
+		//waitKey(0);
 
 		vector<Vec2f> lines;
 		HoughLines(fieldAOrContours, lines, 1, CV_PI / 180, 50, 0, 0);
 		for (size_t i = 0; i < lines.size(); i++)
 		{
 			float rho = lines[i][0], theta = lines[i][1];
+			double degree = (theta*180)/3.14;
+			//cout<<degree<<endl;
 			Point pt1, pt2;
 			double a = cos(theta), b = sin(theta);
 			double x0 = a*rho, y0 = b*rho;
@@ -76,9 +80,12 @@ DetectedObject* LineDetector::DetectObject(Mat& inputImageHSV)
 			pt2.y = cvRound(y0 - 1000 * (a));
 			line(cdst, pt1, pt2, Scalar(0, 0, 255), 1, CV_AA);
 		}
+		//cout<<lines.size()<<endl;
 		imshow("source", src);
 		imshow("detected lines", cdst);
-		waitKey(0);*/
+		//waitKey(0);
 	//return 0;
 	return new DetectedLine();
 }
+
+

@@ -33,7 +33,7 @@ LeastSquareApprox* LineApprox::Approx(vector<double> tVector, vector<double> bVe
 	double sumBi = SumVector(bVector);
 	double sumTiBi = SumMultiplyVectors(tVector, bVector);
 
-	double AAtData[4] = { NUM_OF_SAMPLES_TO_APPROX, sumTi, sumTi, sumTi2 };
+	double AAtData[4] = { tVector.size(), sumTi, sumTi, sumTi2 };
 	Mat AAt(2, 2, CV_64FC1, AAtData);
 	//cout << "AAt: " << AAt << endl;
 

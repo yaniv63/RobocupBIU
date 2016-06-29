@@ -34,7 +34,7 @@ LeastSquareApprox* ParabolaApprox::Approx(vector<double> tVector, vector<double>
 	transpose(A, ATran);
 
 	Mat AAtInv = (ATran * A).inv();
-	Mat bMat(NUM_OF_SAMPLES_TO_APPROX, 1, CV_64FC1);
+	Mat bMat(tVector.size(), 1, CV_64FC1);
 	memcpy(bMat.data,bVector.data(),bVector.size()*sizeof(double));
 	//cout << "B: " << bMat << endl;
 

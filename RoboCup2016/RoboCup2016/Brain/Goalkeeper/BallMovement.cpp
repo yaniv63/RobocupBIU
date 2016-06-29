@@ -34,7 +34,7 @@ void BallMovement::PrintDetailsOnImage(Mat image, Point startingPoint)
 
 	sprintf(message, "Time to jump: %f", MsToJump);
 	cout << message << endl;
-	if (0 < MsToJump < 1000)
+	if (0 < MsToJump && MsToJump < 1000)
 	{
 		cout << "JUMP!!" << endl;
 	}

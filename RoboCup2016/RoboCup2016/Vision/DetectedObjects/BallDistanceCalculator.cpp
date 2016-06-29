@@ -27,8 +27,14 @@ BallDistanceCalculator::~BallDistanceCalculator()
 
 int BallDistanceCalculator::CalculateDistance(Point2f ballLocation, float radius, int headTilt)
 {
-	int tiltKey = FindClosestTiltInMap(headTilt);
-	return m_tiltToDatabase[tiltKey]->GetValueFromKey(FRAME_HEIGHT - ((int)ballLocation.y + radius));
+	int largerTiltKey = FindClosestLargerTiltInMap(headTilt);
+	int smallerTiltKey = FindClosestSmallerTiltInMap(headTilt);
+
+	int largerDistance = m_tiltToDatabase[largerTiltKey]->GetValueFromKey(FRAME_HEIGHT - ((int)ballLocation.y + radius));
+	int smallerDistance = m_tiltToDatabase[smallerTiltKey]->GetValueFromKey(FRAME_HEIGHT - ((int)ballLocation.y + radius));
+
+	float actualKeyRatio = (float)(headTilt - smallerTiltKey) / (float)(largerTiltKey - smallerTiltKey);
+	return smallerDistance + ((largerDistance - smallerDistance) * actualKeyRatio);
 }
 
 bool isNumber(const string& s)
@@ -42,9 +48,10 @@ int BallDistanceCalculator::FindClosestTiltInMap(int headTilt)
 {
 	vector<int> mapKeys;
 	for (map<int, DatabaseWrapper*>::iterator it = m_tiltToDatabase.begin();
-			it != m_tiltToDatabase.end(); ++it) {
-		mapKeys.push_back(it->first);
-	}
+				it != m_tiltToDatabase.end(); ++it)
+		{
+			mapKeys.push_back(it->first);
+		}
 
 	int closestKey = mapKeys.front();
 	for (int i = 0; i < (int) mapKeys.size(); i++)
@@ -56,6 +63,48 @@ int BallDistanceCalculator::FindClosestTiltInMap(int headTilt)
 	}
 
 	return closestKey;
+}
+
+int BallDistanceCalculator::FindClosestLargerTiltInMap(int headTilt)
+{
+	vector<int> mapKeys;
+		for (map<int, DatabaseWrapper*>::iterator it = m_tiltToDatabase.begin();
+					it != m_tiltToDatabase.end(); ++it)
+			{
+				mapKeys.push_back(it->first);
+			}
+
+		int closestKey = mapKeys.front();
+		for (int i = 0; i < (int) mapKeys.size(); i++)
+		{
+			if (headTilt < mapKeys[i] && abs(mapKeys[i] - headTilt) < abs(closestKey - headTilt))
+			{
+				closestKey = mapKeys[i];
+			}
+		}
+
+		return closestKey;
+}
+
+int BallDistanceCalculator::FindClosestSmallerTiltInMap(int headTilt)
+{
+	vector<int> mapKeys;
+		for (map<int, DatabaseWrapper*>::iterator it = m_tiltToDatabase.begin();
+					it != m_tiltToDatabase.end(); ++it)
+			{
+				mapKeys.push_back(it->first);
+			}
+
+		int closestKey = mapKeys.front();
+		for (int i = 0; i < (int) mapKeys.size(); i++)
+		{
+			if (headTilt >= mapKeys[i] && abs(mapKeys[i] - headTilt) < abs(closestKey - headTilt))
+			{
+				closestKey = mapKeys[i];
+			}
+		}
+
+		return closestKey;
 }
 
 vector<string> BallDistanceCalculator::FindFilesInFolder(const char* folderPath)
