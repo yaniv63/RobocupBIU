@@ -95,12 +95,7 @@ DetectedObject* BallDetector::geometricBallDetection(Mat& inputImageHSV)
 	}
 
 	ImageShowOnDebug("HolesInField", "BallDetector", holesInField);
-
-	float tilt = Motion::GetInstance()->GetHeadTilt().Tilt;
-	float distance = m_BallDistanceCalculator->CalculateDistance(centersVector[maxRatioIndex], radiusesVector[maxRatioIndex], (int)tilt);
-	return new DetectedBall(centersVector[maxRatioIndex], radiusesVector[maxRatioIndex], distance);
-	//return new DetectedBall();
-
+	return new DetectedBall(centersVector[maxRatioIndex], radiusesVector[maxRatioIndex], CalculateDistance(centersVector[maxRatioIndex], radiusesVector[maxRatioIndex]));
 
 //	if (maxCentersForRecursiveFilter.size() < DEQUE_SIZE) {
 //		maxCentersForRecursiveFilter.push_back(max_center);
@@ -162,8 +157,7 @@ DetectedObject* BallDetector::probabilisticBallDetection(Mat& inputImageHSV)
 	Mat onlyWhiteImage, field;
 	GetWhiteImage(inputImageHSV, onlyWhiteImage);
 	FindField(inputImageHSV, field);
-	imshow("BallDetector: field", field);
-//    imshow("BallDetector: onlyWhiteImage", onlyWhiteImage);
+	//imshow("BallDetector: field", field);
 	Mat onlyGreenImage;
 	inRange(inputImageHSV, Calibration::GetInstance()->MinGreenHSV, Calibration::GetInstance()->MaxGreenHSV, onlyGreenImage);
 	Mat nonGreenImage;
@@ -173,7 +167,7 @@ DetectedObject* BallDetector::probabilisticBallDetection(Mat& inputImageHSV)
 	// Smooth image with blur and closing
 	medianBlur(holesInField, holesInField, 15);
 	CloseImage(holesInField, holesInField);// end of holes
-	imshow("holesInField: probabilistic algorithm", holesInField);
+	//imshow("holesInField: probabilistic algorithm", holesInField);
 	Mat houghCircleInput, houghCircleInputGray, greenMatrixImage, originalBGRImage;
 	vector<Vec3f> circles, circlesInField, circlesInFieldAndBlockHole;
 	cvtColor(inputImageHSV, greenMatrixImage, CV_HSV2BGR);
@@ -325,7 +319,7 @@ DetectedObject* BallDetector::probabilisticBallDetection(Mat& inputImageHSV)
     finalCenter= new Point(cvRound(circlesInField[chosenCenterLocationInArray][0]), cvRound(circlesInField[chosenCenterLocationInArray][1]));
     circle(houghCircleInputGray, *finalCenter, (float)finalRadius, Colors::Blue, 2);
 
-	return new DetectedBall(*finalCenter, (float)finalRadius, 0);
+	return new DetectedBall(*finalCenter, (float)finalRadius, CalculateDistance(*finalCenter, (float)finalRadius));
 
 
     /* TODO: strat of the old code
@@ -406,4 +400,8 @@ DetectedObject* BallDetector::probabilisticBallDetection(Mat& inputImageHSV)
 //	}
 }
 
-
+float BallDetector::CalculateDistance(Point2f center, float radius)
+{
+    float tilt = Motion::GetInstance()->GetHeadTilt().Tilt;
+    return m_BallDistanceCalculator->CalculateDistance(center, radius, (int)tilt);
+}
