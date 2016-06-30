@@ -69,9 +69,9 @@ void StateMachine::Run()
 
 		m_currentState->Run();
 		stateName = m_currentState->Name();
-		cout << "State name is " << m_currentState->NameToString() << endl;
+		//cout << "State name is " << m_currentState->NameToString() << endl;
 		stateVariable = m_currentState->GetStateVariable();
-		cout << "stateVariable is " << stateVariable;
+		//cout << "stateVariable is " << stateVariable;
 
 		/*if (m_currentState != NULL)
 		{

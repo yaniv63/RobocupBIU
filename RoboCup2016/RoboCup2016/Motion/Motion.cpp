@@ -82,7 +82,8 @@ void Motion::WalkStraight(int cmToWalk)
 
 void Motion::StartWalking()
 {
-	Head::GetInstance()->m_Joint.SetEnableHeadOnly(true, true);
+	Walking::GetInstance()->m_Joint.SetEnableBody(false);
+	//Head::GetInstance()->m_Joint.SetEnableHeadOnly(true, true);
 	Walking::GetInstance()->m_Joint.SetEnableBodyWithoutHead(true, true);
 	Walking::GetInstance()->X_MOVE_AMPLITUDE = 5;
 	Walking::GetInstance()->Y_MOVE_AMPLITUDE = 0;
@@ -92,7 +93,8 @@ void Motion::StartWalking()
 
 void Motion::StartWalking(int x_amp, int y_amp, int a_amp)
 {
-	Head::GetInstance()->m_Joint.SetEnableHeadOnly(true, true);
+	Walking::GetInstance()->m_Joint.SetEnableBody(false);
+	//Head::GetInstance()->m_Joint.SetEnableHeadOnly(true, true);
 	Walking::GetInstance()->m_Joint.SetEnableBodyWithoutHead(true, true);
 	Walking::GetInstance()->X_MOVE_AMPLITUDE = x_amp;
 	Walking::GetInstance()->Y_MOVE_AMPLITUDE = y_amp;
@@ -111,6 +113,8 @@ void Motion::StartWalking(double distance)
 void Motion::StopWalking()
 {
 	Walking::GetInstance()->Stop();
+	//Walking::GetInstance()->m_Joint.SetEnableBody(false);
+	//Action::GetInstance()->m_Joint.SetEnableBody(true, true);
 }
 
 void Motion::GetUp()
@@ -137,16 +141,23 @@ void Motion::TurnByAngle(double angle)
 	if(angle == 0)
 		return;
 	else if(angle > 0)
-		StartWalking(-5,0,24);
+		StartWalking(0,0,30);
 	else if(angle < 0)
 	{
 		angle = -angle;
-		StartWalking(-5,0,-24);
+		StartWalking(0,0,-30);
 	}
-
-	usleep(factor*angle*24);
+	usleep(2000*1000);
+	//usleep(factor*angle*27);
 	StopWalking();
-	SetHeadTilt(HeadTilt(0,0));
+	SetHeadTilt(HeadTilt(GetHeadTilt().Tilt,0));
+}
+
+void Motion::TurnToGoal(double angle)
+{
+	StartWalking(0,40,5);
+	usleep(88888.8888*angle);
+	StopWalking();
 }
 
 void Motion::FreeAllEngines()
@@ -156,6 +167,8 @@ void Motion::FreeAllEngines()
 
 void Motion::SetHeadTilt(HeadTilt headTilt)
 {
+	Head::GetInstance()->m_Joint.SetEnableHeadOnly(true);
+	Walking::GetInstance()->m_Joint.SetEnableBodyWithoutHead(true);
 	Head::GetInstance()->MoveByAngle(headTilt.Pan, headTilt.Tilt);
 	WaitForActionFinish();
 }
@@ -169,6 +182,8 @@ HeadTilt Motion::GetHeadTilt()
 
 void Motion::RunAction(ActionPage actionPage)
 {
+	Action::GetInstance()->m_Joint.SetEnableBody(true, true);
+	WaitForActionFinish();
 	Action::GetInstance()->Start((int)actionPage);
 	WaitForActionFinish();
 }

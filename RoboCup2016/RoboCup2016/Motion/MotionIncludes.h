@@ -20,7 +20,7 @@
 #include "LinuxActionScript.h"
 #include "JointData.h"
 
-#define U2D_DEV_NAME0 "/dev/ttyUSB0"
+#define U2D_DEV_NAME0 "/dev/controller"
 #define U2D_DEV_NAME1 "/dev/ttyUSB1"
 
 enum class ActionPage {

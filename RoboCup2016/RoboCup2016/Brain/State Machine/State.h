@@ -18,9 +18,9 @@ enum StateName
 };
 
 static const int TiltMax = -10;
-static const int TiltMin = -55;
-static const int PanMaxLeft = 70;
-static const int PanMaxRight = -70;
+static const int TiltMin = -54;
+static const int PanMaxLeft = 67;
+static const int PanMaxRight = -67;
 
 class State
 {

@@ -38,6 +38,7 @@ public:
 	void StopWalking();
 	void GetUp();
 	void TurnByAngle(double angle);
+	void TurnToGoal(double angle);
 	
 	void SetHeadTilt(HeadTilt headTilt);
 	HeadTilt GetHeadTilt();
@@ -48,7 +49,7 @@ public:
 	void FreeAllEngines();
 	void StartEngines();
 
-	const float factor = 1388.89;
+	const float factor = 1333.3333333;
 
 private:
 	Motion();

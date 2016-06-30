@@ -23,7 +23,7 @@ Brain* Brain::GetInstance()
 
 Brain::Brain()
 {
-	isDebug = false;
+	isDebug = true;
 }
 
 Brain::~Brain()
@@ -41,6 +41,41 @@ void Brain::RunThread()
 	}
 }
 
+void Brain::StartPlay()
+{
+	bool flag = true;
+	while (flag)
+	{
+		try
+		{
+			Log::GetInstance()->Info("Starting to play\n", "Brain");
+			PlayerInfo info;
+			StateMachine* fsm;
+			if (info.isGoalkeeper)
+			{
+				cout << "Goalkeeper statem machine selected"<<endl;
+				fsm = new GoalKeeperStateMachine();
+			}
+			else
+			{
+				fsm = new StateMachine();
+			}
+			fsm->Run();
+
+			if(fsm != NULL)
+			{
+				delete fsm;
+			}
+
+			flag = false; //finished successfully
+		}
+		catch (Exception ex)
+		{
+			cout << "Caught exception!!!. Msg: " << ex.msg << endl;
+		}
+	}
+}
+
 void* BrainActionAsync(void*)
 {
 	// Sleep until the Vision thread will print its header.
@@ -52,7 +87,7 @@ void* BrainActionAsync(void*)
 
 	if (!Brain::GetInstance()->isDebug)
 	{
-		Brain::GetInstance()->Play();
+		Brain::GetInstance()->StartPlay();
 	}
 	else
 	{
@@ -116,9 +151,11 @@ void* BrainActionAsync(void*)
 				//TODO: Finish options
 				case Walk:
 				{
-					motion->StartWalking(0,5,0);
-					usleep(3000*1000);
-					motion->StopWalking();
+
+					motion->TurnByAngle(90);
+					//motion->StartWalking(0,40,5);
+					//usleep(4000*1000);
+					//motion->StopWalking();
 					//motion->StartWalking(5,0,0);
 
 					/*while (MotionStatus::FALLEN == STANDUP)
@@ -132,11 +169,16 @@ void* BrainActionAsync(void*)
 
 				case TurnLeft:
 				{
+					motion->RunAction(ActionPage::BendToBall);
 					break;
 				}
 
 				case TurnRight:
 				{
+					//motion->StartWalking();
+					//usleep(3000*1000);
+					//motion->StopWalking();
+					motion->TurnByAngle(90);
 					break;
 				}
 
@@ -170,41 +212,6 @@ void* BrainActionAsync(void*)
 		}
 	}
 	return NULL;
-}
-
-void Brain::Play()
-{
-	bool flag = true;
-	while (flag)
-	{
-		try
-		{
-			Log::GetInstance()->Info("Starting to play\n", "Brain");
-			PlayerInfo info;
-			StateMachine* fsm;
-			if (info.isGoalkeeper)
-			{
-				cout << "Goalkeeper statem machine selected"<<endl;
-				fsm = new GoalKeeperStateMachine();
-			}
-			else
-			{
-				fsm = new StateMachine();
-			}
-			fsm->Run();
-
-			if(fsm != NULL)
-			{
-				delete fsm;
-			}
-
-			flag = false; //finished successfully
-		}
-		catch (Exception ex)
-		{
-			cout << "Caught exception!!!. Msg: " << ex.msg << endl;
-		}
-	}
 }
 
 MenuOption ShowMenuAndGetOptionFromUser()

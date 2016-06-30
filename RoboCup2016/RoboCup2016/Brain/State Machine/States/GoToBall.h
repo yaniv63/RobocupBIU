@@ -8,7 +8,7 @@ class GoToBall : public State
 	virtual ~GoToBall();
 
 	virtual void Run();
-
-	const double DISTANCE_WHEN_LOSING_BALL = 21; //cm
+	bool CenterBall();
+	const double DISTANCE_WHEN_LOSING_BALL = 7; //21; //cm
 };
 

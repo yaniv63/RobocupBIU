@@ -9,7 +9,7 @@
 
 Compass* Compass::m_instance=NULL;
 
-Robot::LinuxUM7 linux_um7( "/dev/ttyUSB1" );
+Robot::LinuxUM7 linux_um7( "/dev/compass" );
 Robot::UM7 um7( &linux_um7 );
 
 Compass::Compass() {

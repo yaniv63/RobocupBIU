@@ -15,7 +15,7 @@ public:
 	~Brain();
 
 	void RunThread();
-	void Play();
+	void StartPlay();
 
 	bool isDebug;
 

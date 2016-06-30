@@ -20,13 +20,14 @@ void LookForBall::Run()
 	//usleep(3000*1000);
 	while (!m_Vision->Ball->Get()->IsDetected && MotionStatus::FALLEN == STANDUP)
 	{
+		usleep(1000*1000);
 		m_Motion->SetHeadTilt(HeadTilt(tilt, pan));
 
-		usleep(400*1000);
+		//usleep(500*1000);
 		if (pan > PanMaxLeft)
 		{
 			pan = PanMaxRight;
-			tilt += 22.5;
+			tilt += 15;
 			if (tilt > -10)
 			{
 				m_stateVariable = "BallNotFound";
@@ -34,8 +35,7 @@ void LookForBall::Run()
 				return;
 			}
 		}
-		pan += 25;
-
+		pan += 15;
 	}
 
 	if (MotionStatus::FALLEN != STANDUP)
@@ -60,49 +60,49 @@ void LookForBall::Run()
 bool LookForBall::CenterBall()
 {
 	WriteLine("Centering ball");
-	usleep(3000*1000);
+	//usleep(3000*1000);
 	Point2f location = m_Vision->Ball->Get()->Location;
 	float tilt = m_Motion->GetHeadTilt().Tilt;
 	float pan = m_Motion->GetHeadTilt().Pan;
 
 	//TODO- check when x==-1 and y==-1
 
-	while (location.x < 300 || location.x > 340 || location.y < 220 || location.y > 260)
+	while (location.x < 290 || location.x > 350 || location.y < 210 || location.y > 270)
 	{
 		if (location.x == -1 || location.y == -1)
 		{
 			return false;
 		}
-		if (location.x < 300)
+		if (location.x < 290)
 		{
 			//turn head right
 			pan +=1;
 			m_Motion->SetHeadTilt(HeadTilt(tilt, pan));
 
 		}
-		else if (location.x > 340)
+		else if (location.x > 350)
 		{
 			//turn head left
 			pan -=1;
 			m_Motion->SetHeadTilt(HeadTilt(tilt, pan));
 		}
 
-		if (location.y < 220)
+		if (location.y < 210)
 		{
 			//turn head up
 			tilt +=1;
 			m_Motion->SetHeadTilt(HeadTilt(tilt, pan));
 		}
-		else if (location.y > 260)
+		else if (location.y > 270)
 		{
 			//turn head down
 			tilt -=1;
 			m_Motion->SetHeadTilt(HeadTilt(tilt, pan));
 		}
-		usleep(200*1000);
+		usleep(100*1000);
 		location = m_Vision->Ball->Get()->Location;
-		cout << "x " << location.x <<endl;
-		cout << "y " << location.y <<endl;
+		//cout << "x " << location.x <<endl;
+		//cout << "y " << location.y <<endl;
 	}
 	return true;
 }
